@@ -319,7 +319,8 @@
 
 <header class="header-logo">
   <div class="wrap">
-    <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" alt="شعار النظام">
+    <!-- استخدام الشعار المحلي بدلاً من GitHub -->
+    <img src="26.png" alt="شعار النظام">
     <div class="header-text">
       <h1>نظام التقارير الإلكترونية</h1>
       <p>منصة متكاملة لإدارة التقارير المدرسية</p>
@@ -332,36 +333,36 @@
   <div class="nav-container">
     <div class="nav-title">تقارير المدرسة الشاملة</div>
     <div class="cards-container">
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/R1397/', 'التقارير')">
+      <div class="card" onclick="loadInIframe('R1397.html', 'التقارير')">
         <div class="icon">🗓️</div>
         <div class="title">التقارير</div>
         <div class="subtitle"><span>اليومي</span><span>الأسبوعي</span><span>الشهري</span></div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/A1397/', 'النشاط الطلابي')">
+      <div class="card" onclick="loadInIframe('A1397.html', 'النشاط الطلابي')">
         <div class="icon">🌟</div>
         <div class="title">النشاط الطلابي</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/AC1397/', 'الأنشطة اللاصفية')">
+      <div class="card" onclick="loadInIframe('AC1397.html', 'الأنشطة اللاصفية')">
         <div class="icon">🧩</div>
         <div class="title">الأنشطة اللاصفية</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Trace1397/', 'متابعة الأنشطة')">
+      <div class="card" onclick="loadInIframe('Trace1397.html', 'متابعة الأنشطة')">
         <div class="icon">📋</div>
         <div class="title">متابعة الأنشطة</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/L1397/', 'التواصل مع أولياء الأمور')">
+      <div class="card" onclick="loadInIframe('ParentContactForm.html', 'التواصل مع أولياء الأمور')">
         <div class="icon">📞</div>
         <div class="title">التواصل مع أولياء الأمور</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/T1397/', 'التوجيه الطلابي')">
+      <div class="card" onclick="loadInIframe('T1397.html', 'التوجيه الطلابي')">
         <div class="icon">🎓</div>
         <div class="title">التوجيه الطلابي</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/V1397/', 'تبادل الزيارات')">
+      <div class="card" onclick="loadInIframe('V1397.html', 'تبادل الزيارات')">
         <div class="icon">📝</div>
         <div class="title">تبادل الزيارات</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/P1397/', 'خريطة نواتج التعلّم')">
+      <div class="card" onclick="loadInIframe('P1397.html', 'خريطة نواتج التعلّم')">
         <div class="icon">🗺️</div>
         <div class="title">خريطة نواتج التعلّم</div>
       </div>
@@ -378,23 +379,23 @@
         <div class="title">تقرير عام</div>
         <div class="subtitle"><span>يومي</span><span>أسبوعي</span><span>شهري</span></div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/PLC1397/', 'مجتمعات التعلّم المهنية')">
+      <div class="card" onclick="loadInIframe('W1400.html', 'مجتمعات التعلّم المهنية')">
         <div class="icon">📑</div>
         <div class="title">مجتمعات التعلّم المهنية</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/D1397/', 'التوجيه الصحّي')">
+      <div class="card" onclick="loadInIframe('H1700.html', 'التوجيه الصحّي')">
         <div class="icon">⚕️</div>
         <div class="title">التوجيه الصحّي</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/S1397/', 'التعلّم النشط')">
+      <div class="card" onclick="loadInIframe('H-ActiveLearningStrategy.html', 'التعلّم النشط')">
         <div class="icon">♟</div>
         <div class="title">التعلّم النشط</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/LessonA1397/', 'الدرس التطبيقي')">
+      <div class="card" onclick="loadInIframe('H-LessonLessonApplied.html', 'الدرس التطبيقي')">
         <div class="icon">📚</div>
         <div class="title">الدرس التطبيقي</div>
       </div>
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Warshah1397/', 'ورش العمل')">
+      <div class="card" onclick="loadInIframe('H-WorkshopReport.html', 'ورش العمل')">
         <div class="icon">🛠️</div>
         <div class="title">ورش العمل</div>
       </div>
@@ -762,6 +763,7 @@
       nav.style.display='block';
       document.title='نظام التقارير الإلكترونية';
       backBtn.style.display='none';
+      window.scrollTo({top:0,behavior:'smooth'});
     };
   }
 
@@ -791,6 +793,7 @@
       document.getElementById('general-section').style.display='none';
       document.title='نظام التقارير الإلكترونية';
       backBtn.style.display='none';
+      window.scrollTo({top:0,behavior:'smooth'});
     };
   }
 
@@ -894,7 +897,7 @@
 
       printDiv.innerHTML=`
         <div style="text-align:center;margin-bottom:14px;">
-          <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" style="width:100%;height:60px;object-fit:contain;margin-bottom:6px;">
+          <img src="26.png" style="width:100%;height:60px;object-fit:contain;margin-bottom:6px;">
           <h1 style="color:#047857;font-size:20px;margin:0 0 6px;font-weight:900;border-bottom:1px solid #bbf7d0;padding-bottom:6px;">تقارير حصص الانتظار</h1>
         </div>
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
@@ -1023,8 +1026,7 @@
         printDiv.innerHTML=`
           <div style="flex:1;display:flex;flex-direction:column;">
             <div style="text-align:center;margin-bottom:24px;">
-              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
-                   crossorigin="anonymous"
+              <img src="26.png"
                    style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
               <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير تنفيذ برنامج</div>
               <div style="margin-top:8px;font-size:15px;font-weight:700;">
@@ -1165,8 +1167,7 @@
         printDiv.innerHTML=`
           <div style="flex:1;display:flex;flex-direction:column;">
             <div style="text-align:center;margin-bottom:24px;">
-              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
-                   crossorigin="anonymous"
+              <img src="26.png"
                    style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
               <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير عام لتنفيذ برنامج / نشاط</div>
               <div style="margin-top:8px;font-size:15px;font-weight:700;">
@@ -1332,3 +1333,4 @@
 </script>
 </body>
 </html>
+
