@@ -319,7 +319,7 @@
 
 <header class="header-logo">
   <div class="wrap">
-    <!-- استخدام الشعار المحلي بدلاً من GitHub -->
+    <!-- يفضّل تخزين الشعار محلياً باسم 26.png في نفس المجلد -->
     <img src="26.png" alt="شعار النظام">
     <div class="header-text">
       <h1>نظام التقارير الإلكترونية</h1>
@@ -569,6 +569,14 @@
         <textarea class="input" id="labBeneficiaries" required placeholder="الفئة المستفيدة (مثال: طالبات الصف الرابع، معلمات العلوم...)"></textarea>
       </label>
 
+      <label>الأهداف *
+        <textarea class="input" id="labGoals" required placeholder="اكتبي أهداف البرنامج أو التجربة..."></textarea>
+      </label>
+
+      <label>الشواهد *
+        <textarea class="input" id="labEvidence" required placeholder="اكتبي الشواهد / الأدلة (صور، تقارير، نماذج...)"></textarea>
+      </label>
+
       <div class="actions">
         <button class="btn" type="button" id="saveLab">حفظ التقرير</button>
         <button class="btn" type="button" id="exportLabs">تصدير جميع التقارير PDF</button>
@@ -581,9 +589,15 @@
       <table class="lab-table">
         <thead>
           <tr>
-            <th>م</th><th>البرنامج / التجربة</th><th>المنفذة</th>
-            <th>تاريخ التنفيذ</th><th>عدد المستهدفين</th>
-            <th>المستفيدون</th><th>إجراء</th>
+            <th>م</th>
+            <th>البرنامج / التجربة</th>
+            <th>المنفذة</th>
+            <th>تاريخ التنفيذ</th>
+            <th>عدد المستهدفين</th>
+            <th>المستفيدون</th>
+            <th>الأهداف</th>
+            <th>الشواهد</th>
+            <th>إجراء</th>
           </tr>
         </thead>
         <tbody id="labsBody"></tbody>
@@ -953,6 +967,7 @@
   // =================================================================================
 
   let labExperiments=[];
+
   function loadLab(){
     try{
       const saved=localStorage.getItem('w26_lab_experiments');
@@ -960,7 +975,11 @@
       renderLab();
     }catch(e){}
   }
-  function saveLab(){localStorage.setItem('w26_lab_experiments',JSON.stringify(labExperiments));}
+
+  function saveLab(){
+    localStorage.setItem('w26_lab_experiments',JSON.stringify(labExperiments));
+  }
+
   function renderLab(){
     const body=document.getElementById('labsBody');
     if(!body) return;
@@ -973,10 +992,19 @@
         <td>${escapeHtml(e.date)}</td>
         <td>${escapeHtml(e.targetCount)}</td>
         <td class="text-right">${escapeHtml(e.beneficiaries)}</td>
-        <td><button class="btn danger" style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;" onclick="deleteLab(${i})">حذف</button></td>`;
+        <td class="text-right">${escapeHtml(e.goals || '')}</td>
+        <td class="text-right">${escapeHtml(e.evidence || '')}</td>
+        <td>
+          <button class="btn danger"
+                  style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;"
+                  onclick="deleteLab(${i})">
+            حذف
+          </button>
+        </td>`;
       body.appendChild(tr);
     });
   }
+
   function deleteLab(i){
     if(!confirm('هل تريدين حذف هذا التقرير؟')) return;
     labExperiments.splice(i,1);
@@ -984,6 +1012,7 @@
     renderLab();
     showToast('تم حذف التقرير');
   }
+
   function initLabForm(){
     document.getElementById('saveLab').onclick=function(){
       const program=document.getElementById('labProgram').value.trim();
@@ -992,26 +1021,48 @@
       const targetCount=document.getElementById('labTargetCount').value.trim();
       const date=document.getElementById('labDate').value.trim();
       const beneficiaries=document.getElementById('labBeneficiaries').value.trim();
-      if(!program||!executor||!location||!targetCount||!date||!beneficiaries){
+      const goals=document.getElementById('labGoals').value.trim();
+      const evidence=document.getElementById('labEvidence').value.trim();
+
+      if(!program||!executor||!location||!targetCount||!date||!beneficiaries||!goals||!evidence){
         showToast('أكملي جميع الحقول المطلوبة','warn');
         return;
       }
-      labExperiments.push({program,executor,location,targetCount,date,beneficiaries});
+
+      labExperiments.push({
+        program,
+        executor,
+        location,
+        targetCount,
+        date,
+        beneficiaries,
+        goals,
+        evidence
+      });
+
       saveLab();
       renderLab();
       document.getElementById('labForm').reset();
       showToast('تم حفظ التقرير');
     };
+
     document.getElementById('clearLabs').onclick=function(){
-      if(!labExperiments.length){showToast('لا توجد تقارير مسجلة','warn');return;}
+      if(!labExperiments.length){
+        showToast('لا توجد تقارير مسجلة','warn');
+        return;
+      }
       if(!confirm('مسح جميع تقارير المختبرات؟')) return;
       labExperiments=[];
       saveLab();
       renderLab();
       showToast('تم مسح جميع التقارير');
     };
+
     document.getElementById('exportLabs').onclick=async function(){
-      if(!labExperiments.length){showToast('لا توجد تقارير مسجلة','warn');return;}
+      if(!labExperiments.length){
+        showToast('لا توجد تقارير مسجلة','warn');
+        return;
+      }
       showToast('جاري تجهيز ملف PDF...','warn');
 
       const JsPDF=getJsPDF();
@@ -1020,6 +1071,7 @@
 
       for(let i=0;i<labExperiments.length;i++){
         const exp=labExperiments[i];
+
         const printDiv=document.createElement('div');
         printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 40px 30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
 
@@ -1028,9 +1080,10 @@
             <div style="text-align:center;margin-bottom:24px;">
               <img src="26.png"
                    style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
-              <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير تنفيذ برنامج</div>
+              <div style="font-weight:800;font-size:17px;margin-top:4px;">وزارة التعليم</div>
+              <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير تنفيذ برنامج – المختبرات</div>
               <div style="margin-top:8px;font-size:15px;font-weight:700;">
-                <span>البرنامج / التجربة:</span>
+                <span>اسم البرنامج / التجربة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.program || '')}</span>
               </div>
             </div>
@@ -1045,12 +1098,20 @@
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.location || '')}</span>
               </div>
               <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
-                <span>عدد المستهدفون:</span>
+                <span>عدد المستهدفين:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.targetCount || '')}</span>
               </div>
               <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
                 <span>المستفيدون:</span>
                 <span style="padding-right:6px;font-weight:500;white-space:pre-wrap;">${escapeHtml(exp.beneficiaries || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>الأهداف:</span>
+                <span style="padding-right:6px;font-weight:500;white-space:pre-wrap;">${escapeHtml(exp.goals || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>الشواهد:</span>
+                <span style="padding-right:6px;font-weight:500;white-space:pre-wrap;">${escapeHtml(exp.evidence || '')}</span>
               </div>
               <div style="font-size:15px;font-weight:700;">
                 <span>تاريخ التنفيذ:</span>
@@ -1243,11 +1304,8 @@
 
   let currentHijriYear=1447,currentHijriMonth=1;
   const HIJRI_MONTH_NAMES=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-  // هذا التقويم هو تقويم مبسط يعتمد على 30 يوم لكل شهر لغرض الإدخال السريع
-  // ولا يعتمد على خوارزميات تحويل دقيقة
 
   function getTodayHijri(){
-    // افتراض تاريخ اليوم الهجري لغرض العرض
     const t=new Date();
     return `1447/${t.getMonth()+1}/${t.getDate()}`;
   }
@@ -1258,7 +1316,7 @@
     const daysContainer=calendar.querySelector('.hijri-days');
 
     monthYear.textContent=HIJRI_MONTH_NAMES[currentHijriMonth-1]+' '+currentHijriYear;
-    const daysInMonth=30; // تبسيط: 30 يوم لكل شهر
+    const daysInMonth=30;
     let html='';
     for(let d=1;d<=daysInMonth;d++) html+=`<div class="hijri-day">${d}</div>`;
     daysContainer.innerHTML=html;
