@@ -23,6 +23,7 @@ body {
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
 }
 
+/* الهيدر الأخضر */
 header {
   background: #087558; /* هوية الهيدر */
   color: white;
@@ -32,6 +33,17 @@ header {
 header h3 {
   margin: 3px 0;
   font-size: 16px;
+}
+
+/* ديباجة 26 أعلى الصفحة */
+.top-banner{
+  text-align:center;
+  margin: 0 0 10px; /* مافي فراغ فوق، بس تحت */
+}
+.top-banner img{
+  width:100%;
+  max-height:60px;
+  object-fit:contain;
 }
 
 h3 label {
@@ -127,8 +139,18 @@ footer {
 <body>
 
 <div id="mainContent">
-  <header><h3>تقرير تنفيذ استراتيجية تعلّم نشط</h3></header>
+  <!-- نقلنا كل شيء داخل #waiting عشان يطلع في الـ PDF -->
   <div id="waiting" class="tab-content active">
+
+    <!-- ✅ ديباجة 26 أعلى شيء -->
+    <div class="top-banner">
+      <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
+           alt="شعار 26"
+           crossorigin="anonymous">
+    </div>
+
+    <!-- الهيدر الأخضر تحت الديباجة مباشرة -->
+    <header><h3>تقرير تنفيذ استراتيجية تعلّم نشط</h3></header>
 
     <!-- إدارة تعليم / المدرسة -->
     <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
@@ -336,7 +358,8 @@ function printPDF(tabId, btn) {
   wrapper.style.position = 'relative';
   wrapper.style.width = '210mm';
   wrapper.style.height = '296.5mm';
-  wrapper.style.padding = '30mm 10mm 20mm 10mm';
+  /* ✅ قللنا المسافة من أعلى الورقة عشان الديباجة تطلع فوق */
+  wrapper.style.padding = '10mm 10mm 20mm 10mm';
   wrapper.style.boxSizing = 'border-box';
   wrapper.style.backgroundImage = 'url("images/background.png")';
   wrapper.style.backgroundSize = 'cover';
@@ -418,3 +441,4 @@ document.querySelectorAll('#waiting input[type="text"], #waiting textarea').forE
 </script>
 </body>
 </html>
+
