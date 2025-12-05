@@ -20,14 +20,41 @@ body {
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
 }
 #mainContent { padding: 10px; }
+
+/* هيدر 26 */
+.report-banner {
+  text-align: center;
+  margin: 5px auto 8px;
+}
+.report-banner img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* هوية الهيدر باللون الأخضر */
 header { background: #005741; color: white; text-align: center; padding: 10px; }
 header h3 { margin: 3px 0; font-size: 16px; }
-h3 label { font-weight: bold; font-size: 18px; text-align: center; display: block; margin-bottom: 10px; }
-label { display: block; margin: 5px 0 2px; font-weight: bold; font-size: 12px; text-align: center; }
-input, textarea {
+
+h3 label {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  display: block;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin: 5px 0 2px;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+}
+
+input,
+textarea {
   width: 100%;
-  padding: 4px;
+  padding: 4px 6px;
   border: 1px solid #c2c1c2;
   border-radius: 4px;
   margin-bottom: 5px;
@@ -36,8 +63,38 @@ input, textarea {
   text-align: center;
   background: transparent;
   font-family: 'HelveticaNeueW23', Arial, sans-serif;
+  line-height: 1.6;
+  word-spacing: 1px;
 }
+
 textarea { min-height: 40px; }
+
+/* حقول نصية طويلة داخل الجداول / الوصف – يمين وأسطر مريحة */
+.long-text {
+  text-align: right;
+  line-height: 1.8;
+  word-spacing: 1.5px;
+  resize: none;
+}
+
+/* لو استخدمناها داخل الجداول تحديداً */
+.table-text {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 4px 6px;
+  background: transparent;
+}
+
+/* أرقام الخانات داخل الجداول */
+.cell-num {
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  padding: 2px 4px;
+}
+
 button {
   border: none;
   padding: 8px 10px;
@@ -52,8 +109,21 @@ button {
 }
 button.printBtn { background: #555; color: white; }
 button.deleteBtn { background: red; color: white; }
-table { width:100%; border-collapse:collapse; font-size:12px; text-align:right; margin-bottom:15px; }
-table td, table th { border:1px solid #999; padding:2px; height:20px; }
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  text-align:right;
+  margin-bottom:15px;
+}
+table td,
+table th {
+  border:1px solid #999;
+  padding:6px 8px;          /* مسافة أوسع حول النص */
+  height:auto;
+  vertical-align: top;      /* يخلي النص فوق، مو ملزوق تحت */
+}
 table tr:nth-child(even) { background:#f2f2f2; }
 
 #waiting-preview {
@@ -93,8 +163,8 @@ table tr:nth-child(even) { background:#f2f2f2; }
 /* نص فوق زر الاختيار */
 .radio-wrapper {
   display: flex;
-  flex-direction: column; /* النص فوق الزر */
-  align-items: center;    /* توسيط النص والزر أفقياً */
+  flex-direction: column;
+  align-items: center;
   gap: 3px;
   font-size: 12px;
 }
@@ -119,6 +189,14 @@ table tr:nth-child(even) { background:#f2f2f2; }
 <body>
 
 <div id="mainContent">
+
+  <!-- الديباجة أعلى الصفحة -->
+  <div class="report-banner">
+    <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
+         alt="شعار المدرسة والوزارة"
+         crossorigin="anonymous">
+  </div>
+
   <header><h3>تقرير تنفيذ مبادرة نوعية</h3></header>
 
   <!-- نموذج البيانات -->
@@ -140,27 +218,30 @@ table tr:nth-child(even) { background:#f2f2f2; }
     <div><label> التاريخ من</label><input type="text" id="date1" placeholder="اختر التاريخ" style="flex:1;" readonly /></div>
     <div><label> التاريخ الى</label><input type="text" id="date2" placeholder="اختر التاريخ" style="flex:1;" readonly /></div>
   </div>
+
   <div style="display:grid; grid-template-columns:repeat(1,1fr); gap:5px; margin-bottom:10px;">
-    <div><label>وصف المبادرة</label><input type="text" /></div>
+    <div>
+      <label>وصف المبادرة</label>
+      <textarea class="long-text" style="text-align:right;"></textarea>
+    </div>
   </div>
 
-  <!-- جدول المحاور فوق الأهداف -->
-<div>
-  <h4 style="text-align:center; margin:13px 0; background:#0aa2a9; color:white; padding:6px; border-radius:4px;">محاور المبادرة</h4>
-  <table>
-    <tbody>
-      <tr>
-        <td style="font-weight:bold; text-align:center; vertical-align:middle;">المحور</td>
-        <td><div class="radio-wrapper"><span>المعلمة</span><input type="radio"></div></td>
-        <td><div class="radio-wrapper"><span>الطالبة</span><input type="radio"></div></td>
-        <td><div class="radio-wrapper"><span>المنهج</span><input type="radio"></div></td>
-        <td><div class="radio-wrapper"><span>المدرسة</span><input type="radio"></div></td>
-        <td><div class="radio-wrapper"><span>المجتمع</span><input type="radio"></div></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
+  <!-- جدول المحاور -->
+  <div>
+    <h4 style="text-align:center; margin:13px 0; background:#0aa2a9; color:white; padding:6px; border-radius:4px;">محاور المبادرة</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td style="font-weight:bold; text-align:center; vertical-align:middle;">المحور</td>
+          <td><div class="radio-wrapper"><span>المعلمة</span><input type="radio"></div></td>
+          <td><div class="radio-wrapper"><span>الطالبة</span><input type="radio"></div></td>
+          <td><div class="radio-wrapper"><span>المنهج</span><input type="radio"></div></td>
+          <td><div class="radio-wrapper"><span>المدرسة</span><input type="radio"></div></td>
+          <td><div class="radio-wrapper"><span>المجتمع</span><input type="radio"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <!-- ✅ الجدولين -->
   <div class="print-tables">
@@ -169,12 +250,24 @@ table tr:nth-child(even) { background:#f2f2f2; }
       <h4 style="text-align:center; margin:13px 0; background:#0aa2a9; color:white; padding:6px; border-radius:4px;">الأهداف العامة للمبادرة</h4>
       <table>
         <tr>
-          <td style="width:30px;text-align:center;">1</td><td><input type="text" style="width:100%;border:none;"></td>
-          <td style="width:30px;text-align:center;">2</td><td><input type="text" style="width:100%;border:none;"></td>
+          <td style="width:30px;text-align:center;">1</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
+          <td style="width:30px;text-align:center;">2</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
         </tr>
         <tr>
-          <td style="text-align:center;">3</td><td><input type="text" style="width:100%;border:none;"></td>
-          <td style="text-align:center;">4</td><td><input type="text" style="width:100%;border:none;"></td>
+          <td style="text-align:center;">3</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
+          <td style="text-align:center;">4</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
         </tr>
       </table>
     </div>
@@ -184,12 +277,24 @@ table tr:nth-child(even) { background:#f2f2f2; }
       <h4 style="text-align:center; margin:13px 0; background:#0aa2a9; color:white; padding:6px; border-radius:4px;">أدوات ومتطلبات التنفيذ</h4>
       <table>
         <tr>
-          <td style="width:30px;text-align:center;">1</td><td><input type="text" style="width:100%;border:none;"></td>
-          <td style="width:30px;text-align:center;">2</td><td><input type="text" style="width:100%;border:none;"></td>
+          <td style="width:30px;text-align:center;">1</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
+          <td style="width:30px;text-align:center;">2</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
         </tr>
         <tr>
-          <td style="text-align:center;">3</td><td><input type="text" style="width:100%;border:none;"></td>
-          <td style="text-align:center;">4</td><td><input type="text" style="width:100%;border:none;"></td>
+          <td style="text-align:center;">3</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
+          <td style="text-align:center;">4</td>
+          <td>
+            <textarea class="long-text table-text"></textarea>
+          </td>
         </tr>
       </table>
     </div>
@@ -222,7 +327,7 @@ table tr:nth-child(even) { background:#f2f2f2; }
 let uploadedImages = {};
 
 document.addEventListener("DOMContentLoaded", function() {
-  const dateIds = ['date1','date2']; // حقول التاريخ من / إلى
+  const dateIds = ['date1','date2'];
 
   dateIds.forEach(id => {
     const input = document.getElementById(id);
@@ -286,10 +391,12 @@ function printPDF(sectionId,btn){
 
   const element=document.getElementById(sectionId).cloneNode(true);
 
-  // حذف الهيدر وأزرار الملفات
+  // نحذف الهيدر الأخضر فقط، ديباجة 26 تبقى
   const header = element.querySelector('header');
   if(header) header.remove();
-  element.querySelectorAll('button,input[type="file"],#waiting-counter,#waiting-preview .remove-img-btn').forEach(el=>el.remove());
+
+  element.querySelectorAll('button,input[type="file"],#waiting-counter,#waiting-preview .remove-img-btn')
+    .forEach(el=>el.remove());
 
   // تكبير الصور قبل التصدير
   const images = element.querySelectorAll('#waiting-preview img');
@@ -303,7 +410,7 @@ function printPDF(sectionId,btn){
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='20mm';
+  wrapper.style.padding='5mm 15mm 15mm 15mm';  // الديباجة أعلى الصفحة
   wrapper.style.boxSizing='border-box';
   wrapper.style.backgroundImage='url("images/background.png")';
   wrapper.style.backgroundSize='cover';
