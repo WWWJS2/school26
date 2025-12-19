@@ -1230,7 +1230,7 @@
         const exp=labExperiments[i];
 
         const printDiv=document.createElement('div');
-        printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 40px 30px;z-index:3000;direction:rtl;unicode-bidi:plaintext;font-family:'Tajawal',sans-serif;font-size:15px;";
+        printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background-color:#ffffff;padding:40px 40px 30px;z-index:3000;direction:rtl;unicode-bidi:plaintext;font-family:'Tajawal',sans-serif;font-size:15px;color:#0f172a;";
 
         const imagesHtml = (exp.evidenceImages && exp.evidenceImages.length)
           ? exp.evidenceImages.map(src=>`
@@ -1242,7 +1242,7 @@
 
         // NOTE: أهم تغيير هنا: بدال spans مختلطة، نخلي القيم Blocks مع RTL + unicode-bidi:plaintext
         printDiv.innerHTML=`
-          <div style="flex:1;display:flex;flex-direction:column;direction:rtl;unicode-bidi:plaintext;">
+          <div style="flex:1;display:flex;flex-direction:column;direction:rtl;unicode-bidi:plaintext;background-color:#ffffff;color:#0f172a;">
             <div style="text-align:center;margin-bottom:24px;">
               <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
                    crossorigin="anonymous"
@@ -1257,7 +1257,7 @@
               </div>
             </div>
 
-            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;direction:rtl;unicode-bidi:plaintext;">
+            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;direction:rtl;unicode-bidi:plaintext;background-color:#ffffff;color:#0f172a;">
               <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
                 <span>المنفذة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.executor || '')}</span>
@@ -1295,7 +1295,7 @@
             </div>
           </div>
 
-          <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;">
+          <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;background-color:#ffffff;">
             <div style="display:flex;justify-content:flex-start;direction:ltr;">
               <div style="text-align:left;">
                 <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
