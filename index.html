@@ -139,10 +139,6 @@
       font-size:.95rem;
       transition:all .2s;
       color:var(--text);
-      direction: rtl;
-      text-align: right;
-      unicode-bidi: plaintext;
-      -webkit-text-size-adjust: 100%;
     }
     textarea{min-height:90px;resize:vertical;}
     .input:focus,textarea:focus,select:focus{
@@ -252,7 +248,7 @@
       overflow-x:auto;background:#fff;
     }
     table{width:100%;border-collapse:collapse;min-width:750px;font-size:.8rem;}
-    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;vertical-align:top;}
+    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;}
     th{
       background:linear-gradient(135deg,var(--primary),var(--secondary));
       color:#fff;font-weight:800;font-size:.78rem;white-space:nowrap;
@@ -261,7 +257,7 @@
     .general-table th{background:linear-gradient(135deg,#0ea5e9,#0369a1);}
     tbody tr:nth-child(even){background:#f9fafb;}
     tbody tr:hover{background:#ecfdf5;}
-    td.text-right{text-align:right; direction:rtl; unicode-bidi: plaintext; white-space: pre-wrap;}
+    td.text-right{text-align:right;}
 
     .report-header{
       background:linear-gradient(135deg,#14532d,#166534);
@@ -314,6 +310,7 @@
 
 <header class="header-logo">
   <div class="wrap">
+    <!-- ديباجة 26 من GitHub -->
     <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" alt="شعار النظام" crossorigin="anonymous">
     <div class="header-text">
       <h1>نظام التقارير الإلكترونية</h1>
@@ -398,7 +395,6 @@
 </nav>
 
 <main id="local-pages">
-
   <!-- حصة الانتظار -->
   <section id="wait-section" class="card-page" style="display:none;">
     <div class="report-header">
@@ -709,14 +705,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
   // =================================================================================
-  // مساعدات عامة
+  // دوال مساعدة عامة
   // =================================================================================
-  function isIOS(){
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  }
 
   function showToast(msg,type=''){
     const t=document.createElement('div');
@@ -733,21 +725,8 @@
     throw new Error('jsPDF library not loaded');
   }
 
-  async function waitFontsReady(){
-    try{
-      if(document.fonts && document.fonts.ready) await document.fonts.ready;
-    }catch(e){}
-  }
-
   function captureAsCanvas(el){
-    // على iOS غالباً تتحسن العربية مع foreignObjectRendering
-    return html2canvas(el,{
-      scale: isIOS() ? 2 : 1.5,
-      backgroundColor:'#ffffff',
-      useCORS:true,
-      logging:false,
-      foreignObjectRendering: isIOS()
-    });
+    return html2canvas(el,{scale:1.5,backgroundColor:'#ffffff',useCORS:true,logging:false});
   }
 
   function escapeHtml(text){
@@ -760,113 +739,20 @@
       .replace(/'/g, '&#039;');
   }
 
-  // ضغط الصور قبل التخزين/التصدير (مهم للجوال)
-  async function compressImageToDataURL(file, maxW=1400, quality=0.78){
+  // قراءة ملف صورة كـ DataURL لتخزينه في localStorage
+  function readFileAsDataURL(file){
     return new Promise((resolve,reject)=>{
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = ()=>{
-        try{
-          let {width, height} = img;
-          if(width > maxW){
-            const ratio = maxW / width;
-            width = Math.round(width * ratio);
-            height = Math.round(height * ratio);
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          URL.revokeObjectURL(url);
-          // JPEG لتقليل الحجم
-          const dataURL = canvas.toDataURL('image/jpeg', quality);
-          resolve(dataURL);
-        }catch(err){
-          URL.revokeObjectURL(url);
-          reject(err);
-        }
-      };
-      img.onerror = (e)=>{ URL.revokeObjectURL(url); reject(e); };
-      img.src = url;
-    });
-  }
-
-  // =================================================================================
-  // IndexedDB للمختبرات (حل مشكلة عدم الحفظ على الآيفون)
-  // =================================================================================
-  const DB_NAME = 'w26_reports_db';
-  const DB_VERSION = 1;
-  const STORE_LABS = 'labs';
-  let dbPromise = null;
-
-  function openDB(){
-    if(dbPromise) return dbPromise;
-    dbPromise = new Promise((resolve, reject)=>{
-      if(!('indexedDB' in window)){
-        reject(new Error('IndexedDB not supported'));
-        return;
-      }
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = (e)=>{
-        const db = req.result;
-        if(!db.objectStoreNames.contains(STORE_LABS)){
-          db.createObjectStore(STORE_LABS, { keyPath: 'id', autoIncrement: true });
-        }
-      };
-      req.onsuccess = ()=> resolve(req.result);
-      req.onerror = ()=> reject(req.error);
-    });
-    return dbPromise;
-  }
-
-  async function idbGetAllLabs(){
-    const db = await openDB();
-    return new Promise((resolve,reject)=>{
-      const tx = db.transaction(STORE_LABS, 'readonly');
-      const store = tx.objectStore(STORE_LABS);
-      const req = store.getAll();
-      req.onsuccess = ()=> resolve(req.result || []);
-      req.onerror = ()=> reject(req.error);
-    });
-  }
-
-  async function idbAddLab(report){
-    const db = await openDB();
-    return new Promise((resolve,reject)=>{
-      const tx = db.transaction(STORE_LABS, 'readwrite');
-      const store = tx.objectStore(STORE_LABS);
-      const req = store.add(report);
-      req.onsuccess = ()=> resolve(req.result);
-      req.onerror = ()=> reject(req.error);
-    });
-  }
-
-  async function idbDeleteLab(id){
-    const db = await openDB();
-    return new Promise((resolve,reject)=>{
-      const tx = db.transaction(STORE_LABS, 'readwrite');
-      const store = tx.objectStore(STORE_LABS);
-      const req = store.delete(id);
-      req.onsuccess = ()=> resolve(true);
-      req.onerror = ()=> reject(req.error);
-    });
-  }
-
-  async function idbClearLabs(){
-    const db = await openDB();
-    return new Promise((resolve,reject)=>{
-      const tx = db.transaction(STORE_LABS, 'readwrite');
-      const store = tx.objectStore(STORE_LABS);
-      const req = store.clear();
-      req.onsuccess = ()=> resolve(true);
-      req.onerror = ()=> reject(req.error);
+      const reader=new FileReader();
+      reader.onload=e=>resolve(e.target.result);
+      reader.onerror=err=>reject(err);
+      reader.readAsDataURL(file);
     });
   }
 
   // =================================================================================
   // دوال التنقل
   // =================================================================================
+
   function loadInIframe(url,title){
     const iframeContainer=document.getElementById('iframe-container');
     const iframe=document.getElementById('content-frame');
@@ -928,9 +814,11 @@
   }
 
   // =================================================================================
-  // حصة الانتظار (كما هي: localStorage)
+  // حصة الانتظار
   // =================================================================================
+
   let waitSessions=[];
+
   function waitLoadSessions(){
     try{
       const saved=localStorage.getItem('w26_waiting_sessions');
@@ -1005,10 +893,8 @@
       if(!waitSessions.length){showToast('لا توجد حصص مسجلة','warn');return;}
       showToast('جاري تجهيز ملف PDF...','warn');
 
-      await waitFontsReady();
-
       const printDiv=document.createElement('div');
-      printDiv.style.cssText="position:fixed;top:0;left:0;width:1123px;background:#fff;padding:30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:14px;unicode-bidi:plaintext;";
+      printDiv.style.cssText="position:fixed;top:0;left:0;width:1123px;background:#fff;padding:30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:14px;";
 
       let rows='';
       waitSessions.forEach((s,i)=>{
@@ -1020,8 +906,8 @@
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.className)}</td>
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.number)}</td>
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.teacher)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;direction:rtl;unicode-bidi:plaintext;">${escapeHtml(s.activities)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;direction:rtl;unicode-bidi:plaintext;">${escapeHtml(s.fields)}</td>
+          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;">${escapeHtml(s.activities)}</td>
+          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;">${escapeHtml(s.fields)}</td>
         </tr>`;
       });
 
@@ -1030,7 +916,7 @@
           <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" crossorigin="anonymous" style="width:100%;height:60px;object-fit:contain;margin-bottom:6px;">
           <h1 style="color:#047857;font-size:20px;margin:0 0 6px;font-weight:900;border-bottom:1px solid #bbf7d0;padding-bottom:6px;">تقارير حصص الانتظار</h1>
         </div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;direction:rtl;unicode-bidi:plaintext;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead>
             <tr>
               <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">م</th>
@@ -1079,42 +965,21 @@
   }
 
   // =================================================================================
-  // المختبرات (IndexedDB + إصلاح RTL في PDF)
+  // المختبرات
   // =================================================================================
+
   let labExperiments=[];
 
-  async function loadLab(){
-    // ترحيل قديم لو كان موجود في localStorage
+  function loadLab(){
     try{
-      const old = localStorage.getItem('w26_lab_experiments');
-      if(old){
-        const arr = JSON.parse(old)||[];
-        // نخزنهم في IndexedDB مرة واحدة (بدون ضمان صور قديمة ضخمة)
-        for(const r of arr){
-          const report = {
-            program: r.program||'',
-            executor: r.executor||'',
-            location: r.location||'',
-            targetCount: r.targetCount||'',
-            date: r.date||'',
-            beneficiaries: r.beneficiaries||'',
-            goals: r.goals||'',
-            evidenceImages: Array.isArray(r.evidenceImages)? r.evidenceImages : []
-          };
-          try{ await idbAddLab(report); }catch(e){}
-        }
-        localStorage.removeItem('w26_lab_experiments');
-      }
+      const saved=localStorage.getItem('w26_lab_experiments');
+      if(saved) labExperiments=JSON.parse(saved)||[];
+      renderLab();
     }catch(e){}
+  }
 
-    try{
-      labExperiments = await idbGetAllLabs();
-      renderLab();
-    }catch(e){
-      showToast('تنبيه: المتصفح لا يدعم حفظ المختبرات بشكل كامل على هذا الوضع','warn');
-      labExperiments = [];
-      renderLab();
-    }
+  function saveLab(){
+    localStorage.setItem('w26_lab_experiments',JSON.stringify(labExperiments));
   }
 
   function renderLab(){
@@ -1137,7 +1002,7 @@
         <td>
           <button class="btn danger"
                   style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;"
-                  onclick="deleteLabById(${e.id})">
+                  onclick="deleteLab(${i})">
             حذف
           </button>
         </td>`;
@@ -1145,16 +1010,12 @@
     });
   }
 
-  async function deleteLabById(id){
+  function deleteLab(i){
     if(!confirm('هل تريدين حذف هذا التقرير؟')) return;
-    try{
-      await idbDeleteLab(id);
-      labExperiments = await idbGetAllLabs();
-      renderLab();
-      showToast('تم حذف التقرير');
-    }catch(e){
-      showToast('تعذر الحذف','danger');
-    }
+    labExperiments.splice(i,1);
+    saveLab();
+    renderLab();
+    showToast('تم حذف التقرير');
   }
 
   async function initLabForm(){
@@ -1174,44 +1035,40 @@
         return;
       }
 
-      showToast('جاري الحفظ...','warn');
-
-      // تحويل الصور إلى DataURL مضغوط (لتخفيف الحجم + ثبات على iOS)
+      // تحويل الصور إلى base64 لتخزينها
       const evidenceImages=[];
       for(let i=0;i<files.length;i++){
-        const dataUrl=await compressImageToDataURL(files[i], 1400, 0.78);
+        const dataUrl=await readFileAsDataURL(files[i]);
         evidenceImages.push(dataUrl);
       }
 
-      const report = {
-        program, executor, location, targetCount, date, beneficiaries, goals, evidenceImages
-      };
+      labExperiments.push({
+        program,
+        executor,
+        location,
+        targetCount,
+        date,
+        beneficiaries,
+        goals,
+        evidenceImages
+      });
 
-      try{
-        await idbAddLab(report);
-        labExperiments = await idbGetAllLabs();
-        renderLab();
-        document.getElementById('labForm').reset();
-        showToast('تم حفظ التقرير');
-      }catch(e){
-        showToast('تعذر الحفظ (تحققي من وضع التصفح الخاص/المساحة)','danger');
-      }
+      saveLab();
+      renderLab();
+      document.getElementById('labForm').reset();
+      showToast('تم حفظ التقرير');
     };
 
-    document.getElementById('clearLabs').onclick=async function(){
+    document.getElementById('clearLabs').onclick=function(){
       if(!labExperiments.length){
         showToast('لا توجد تقارير مسجلة','warn');
         return;
       }
       if(!confirm('مسح جميع تقارير المختبرات؟')) return;
-      try{
-        await idbClearLabs();
-        labExperiments = [];
-        renderLab();
-        showToast('تم مسح جميع التقارير');
-      }catch(e){
-        showToast('تعذر المسح','danger');
-      }
+      labExperiments=[];
+      saveLab();
+      renderLab();
+      showToast('تم مسح جميع التقارير');
     };
 
     document.getElementById('exportLabs').onclick=async function(){
@@ -1219,136 +1076,106 @@
         showToast('لا توجد تقارير مسجلة','warn');
         return;
       }
-      
-      // حل جذري: فتح نافذة طباعة جديدة بدلاً من html2canvas
-      showToast('جاري تجهيز التقرير...','warn');
-      
-      let allReportsHtml = '';
-      
-      for(let i=0; i<labExperiments.length; i++){
-        const exp = labExperiments[i];
-        
+      showToast('جاري تجهيز ملف PDF...','warn');
+
+      const JsPDF=getJsPDF();
+      const pdf=new JsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+      const pageWidth=pdf.internal.pageSize.getWidth();
+
+      for(let i=0;i<labExperiments.length;i++){
+        const exp=labExperiments[i];
+
+        const printDiv=document.createElement('div');
+        printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 40px 30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
+
         const imagesHtml = (exp.evidenceImages && exp.evidenceImages.length)
           ? exp.evidenceImages.map(src=>`
-              <div style="width:120px;height:90px;border:1px solid #bbf7d0;border-radius:8px;overflow:hidden;display:inline-block;margin:4px;">
+              <div style="width:120px;height:90px;border:1px solid #bbf7d0;border-radius:8px;overflow:hidden;">
                 <img src="${src}" style="width:100%;height:100%;object-fit:cover;">
               </div>
             `).join('')
           : '<span style="font-size:14px;font-weight:500;">لا توجد صور مرفقة</span>';
-        
-        allReportsHtml += `
-          <div style="page-break-after: always; padding: 40px; font-family: 'Tajawal', Arial, sans-serif; direction: rtl; background: #fff; color: #000;">
+
+        printDiv.innerHTML=`
+          <div style="flex:1;display:flex;flex-direction:column;">
             <div style="text-align:center;margin-bottom:24px;">
-              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" 
-                   style="width:100%;max-width:500px;height:70px;object-fit:contain;margin-bottom:8px;">
-              <div style="font-weight:800;font-size:17px;margin-top:4px;color:#000;">وزارة التعليم</div>
-              <div style="font-weight:800;font-size:18px;margin-top:4px;color:#000;">تقرير تنفيذ برنامج – المختبرات</div>
-              <div style="margin-top:8px;font-size:15px;font-weight:700;color:#000;">
+              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
+                   crossorigin="anonymous"
+                   style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
+              <div style="font-weight:800;font-size:17px;margin-top:4px;">وزارة التعليم</div>
+              <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير تنفيذ برنامج – المختبرات</div>
+              <div style="margin-top:8px;font-size:15px;font-weight:700;">
                 <span>اسم البرنامج / التجربة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.program || '')}</span>
               </div>
             </div>
 
-            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;background:#fff;">
-              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
+            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
                 <span>المنفذة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.executor || '')}</span>
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
                 <span>مكان التنفيذ:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.location || '')}</span>
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
                 <span>عدد المستهدفين:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.targetCount || '')}</span>
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#000;">المستفيدون:</div>
-              <div style="font-size:15px;font-weight:500;white-space:pre-wrap;text-align:right;color:#000;">
-                ${escapeHtml(exp.beneficiaries || '')}
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>المستفيدون:</span>
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin:10px 0 6px;color:#000;">الأهداف:</div>
-              <div style="font-size:15px;font-weight:500;white-space:pre-wrap;text-align:right;color:#000;">
-                ${escapeHtml(exp.goals || '')}
+              <div style="padding-right:6px;font-weight:500;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.8;margin-bottom:8px;text-align:right;">${escapeHtml(exp.beneficiaries || '')}</div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>الأهداف:</span>
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin-top:12px;margin-bottom:6px;color:#000;">الشواهد (صور):</div>
-              <div style="margin-bottom:8px;">
+              <div style="padding-right:6px;font-weight:500;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;line-height:1.8;margin-bottom:8px;text-align:right;">${escapeHtml(exp.goals || '')}</div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:6px;">
+                <span>الشواهد (صور):</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
                 ${imagesHtml}
               </div>
-
-              <div style="font-size:15px;font-weight:700;margin-top:10px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-top:4px;">
                 <span>تاريخ التنفيذ:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.date || '')} هـ</span>
               </div>
             </div>
+          </div>
 
-            <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;">
-              <div style="text-align:left;direction:ltr;">
+          <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;">
+            <div style="display:flex;justify-content:flex-start;direction:ltr;">
+              <div style="text-align:left;">
                 <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
                 <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
               </div>
             </div>
           </div>
         `;
+
+        document.body.appendChild(printDiv);
+        const canvas=await captureAsCanvas(printDiv);
+        document.body.removeChild(printDiv);
+
+        const imgData=canvas.toDataURL('image/jpeg',0.95);
+        const imgWidth=pageWidth;
+        const imgHeight=(canvas.height*imgWidth)/canvas.width;
+        const positionY=0;
+
+        if(i>0) pdf.addPage();
+        pdf.addImage(imgData,'JPEG',0,positionY,imgWidth,imgHeight);
       }
-      
-      // فتح نافذة جديدة للطباعة
-      const printWindow = window.open('', '_blank');
-      if(!printWindow){
-        showToast('يرجى السماح بالنوافذ المنبثقة','danger');
-        return;
-      }
-      
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html lang="ar" dir="rtl">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>تقارير المختبرات</title>
-          <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            html, body { 
-              font-family: 'Tajawal', Arial, sans-serif; 
-              background: #fff; 
-              color: #000;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-            @media print {
-              body { background: #fff !important; }
-              * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            }
-            @page { size: A4; margin: 10mm; }
-          </style>
-        </head>
-        <body>
-          ${allReportsHtml}
-          <script>
-            // انتظار تحميل الصور ثم الطباعة
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-              }, 500);
-            };
-          <\/script>
-        </body>
-        </html>
-      `);
-      printWindow.document.close();
-      
-      showToast('تم فتح نافذة الطباعة - اختر حفظ كـ PDF');
+
+      pdf.save('تقارير المختبرات.pdf');
+      showToast('تم تصدير ملف PDF');
     };
   }
 
   // =================================================================================
-  // التقرير العام (localStorage كما هو)
+  // التقرير العام
   // =================================================================================
+
   let generalReports=[];
   function loadGeneral(){
     try{
@@ -1409,19 +1236,103 @@
       renderGeneral();
       showToast('تم مسح جميع التقارير');
     };
+    document.getElementById('exportGeneral').onclick=async function(){
+      if(!generalReports.length){showToast('لا توجد تقارير مسجلة','warn');return;}
+      showToast('جاري تجهيز ملف PDF...','warn');
 
-    // (تصدير التقرير العام بقي كما هو عندك - إذا تبغينه أيضاً بنفس إصلاح RTL قلّي)
+      const JsPDF=getJsPDF();
+      const pdf=new JsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+      const pageWidth=pdf.internal.pageSize.getWidth();
+
+      for(let i=0;i<generalReports.length;i++){
+        const rep=generalReports[i];
+        const printDiv=document.createElement('div');
+        printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 40px 30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
+
+        printDiv.innerHTML=`
+          <div style="flex:1;display:flex;flex-direction:column;">
+            <div style="text-align:center;margin-bottom:24px;">
+              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
+                   crossorigin="anonymous"
+                   style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
+              <div style="font-weight:800;font-size:18px;margin-top:4px;">تقرير عام لتنفيذ برنامج / نشاط</div>
+              <div style="margin-top:8px;font-size:15px;font-weight:700;">
+                <span>نوع التقرير:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.type || '')}</span>
+              </div>
+              <div style="margin-top:4px;font-size:15px;font-weight:700;">
+                <span>عنوان البرنامج / النشاط:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.program || '')}</span>
+              </div>
+            </div>
+
+            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>المنفذ / الجهة المنفذة:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.executor || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>مكان التنفيذ:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.location || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>عدد المستهدفين:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.count || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>الفئة المستفيدة:</span>
+                <span style="padding-right:6px;font-weight:500;white-space:pre-wrap;">${escapeHtml(rep.beneficiaries || '')}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>تاريخ التنفيذ:</span>
+                <span style="padding-right:6px;font-weight:500;">${escapeHtml(rep.date || '')} هـ</span>
+              </div>
+              <hr style="border:none;border-top:1px dashed #bbf7d0;margin:10px 0;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;">
+                <span>أبرز ما تم تنفيذه:</span>
+                <span style="padding-right:6px;font-weight:500;white-space:pre-wrap;">${escapeHtml(rep.details || '')}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;">
+            <div style="display:flex;justify-content:flex-start;direction:ltr;">
+              <div style="text-align:left;">
+                <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
+                <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.body.appendChild(printDiv);
+        const canvas=await captureAsCanvas(printDiv);
+        document.body.removeChild(printDiv);
+
+        const imgData=canvas.toDataURL('image/jpeg',0.95);
+        const imgWidth=pageWidth;
+        const imgHeight=(canvas.height*imgWidth)/canvas.width;
+        const positionY=0;
+
+        if(i>0) pdf.addPage();
+        pdf.addImage(imgData,'JPEG',0,positionY,imgWidth,imgHeight);
+      }
+
+      pdf.save('التقارير العامة.pdf');
+      showToast('تم تصدير ملف PDF');
+    };
   }
 
   // =================================================================================
-  // التقويم الهجري المبسط (كما هو)
+  // التقويم الهجري المبسط
   // =================================================================================
+
   let currentHijriYear=1447,currentHijriMonth=1;
   const HIJRI_MONTH_NAMES=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
 
   function getTodayHijri(){
     const t=new Date();
-    return `1447/${t.getMonth()+1}/${t.getDate()}`;
+    return 1447/${t.getMonth()+1}/${t.getDate()};
   }
 
   function renderHijriCalendar(calendar,input){
@@ -1432,12 +1343,12 @@
     monthYear.textContent=HIJRI_MONTH_NAMES[currentHijriMonth-1]+' '+currentHijriYear;
     const daysInMonth=30;
     let html='';
-    for(let d=1;d<=daysInMonth;d++) html+=`<div class="hijri-day">${d}</div>`;
+    for(let d=1;d<=daysInMonth;d++) html+=<div class="hijri-day">${d}</div>;
     daysContainer.innerHTML=html;
 
     daysContainer.querySelectorAll('.hijri-day').forEach(day=>{
       day.onclick=function(){
-        const val=`${currentHijriYear}/${currentHijriMonth}/${this.textContent}`;
+        const val=${currentHijriYear}/${currentHijriMonth}/${this.textContent};
         input.value=val;
         calendar.classList.remove('active');
         showToast('تم اختيار التاريخ');
@@ -1488,18 +1399,16 @@
   }
 
   // =================================================================================
-  // التهيئة
+  // التهيئة الرئيسية
   // =================================================================================
+
   function initializeApp(){
     waitLoadSessions();
     initWaitForm();
-
     loadLab();
     initLabForm();
-
     loadGeneral();
     initGeneralForm();
-
     initHijriCalendars();
   }
 
