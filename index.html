@@ -1332,7 +1332,7 @@
 
   function getTodayHijri(){
     const t=new Date();
-    return 1447/${t.getMonth()+1}/${t.getDate()};
+    return `1447/${t.getMonth()+1}/${t.getDate()}`;
   }
 
   function renderHijriCalendar(calendar,input){
@@ -1343,12 +1343,12 @@
     monthYear.textContent=HIJRI_MONTH_NAMES[currentHijriMonth-1]+' '+currentHijriYear;
     const daysInMonth=30;
     let html='';
-    for(let d=1;d<=daysInMonth;d++) html+=<div class="hijri-day">${d}</div>;
+    for(let d=1;d<=daysInMonth;d++) html+=`<div class="hijri-day">${d}</div>`;
     daysContainer.innerHTML=html;
 
     daysContainer.querySelectorAll('.hijri-day').forEach(day=>{
       day.onclick=function(){
-        const val=${currentHijriYear}/${currentHijriMonth}/${this.textContent};
+        const val=`${currentHijriYear}/${currentHijriMonth}/${this.textContent}`;
         input.value=val;
         calendar.classList.remove('active');
         showToast('تم اختيار التاريخ');
