@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>نظام التقارير الإلكترونية</title>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
     :root{
       --primary:#10b981;
       --secondary:#059669;
@@ -21,7 +23,9 @@
       --card-bg:#ffffff;
       --shadow:0 4px 12px rgba(16,185,129,.1);
     }
+
     *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
     html, body{
       font-family:'Tajawal',sans-serif;
       background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 50%,#f0fdf4 100%);
@@ -31,6 +35,7 @@
       overflow-x:hidden;
       font-size:16px;
     }
+
     .header-logo{
       background:#fff;
       position:sticky;
@@ -50,11 +55,7 @@
       align-items:center;
       flex-direction:column;
     }
-    .header-logo img{
-      height:84px;
-      width:auto;
-      object-fit:contain;
-    }
+    .header-logo img{height:84px;width:auto;object-fit:contain;}
     .header-text{text-align:center;margin-top:10px;}
     .header-text h1{color:var(--dark);font-size:1.8rem;margin-bottom:5px;}
     .header-text p{color:var(--gray);font-size:1rem;}
@@ -67,6 +68,7 @@
     }
     .nav-container{width:var(--container);max-width:1200px;margin:0 auto;padding:0 12px;}
     .nav-title{color:#fff;text-align:center;margin-bottom:15px;font-size:1.3rem;font-weight:700;}
+
     .cards-container{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
@@ -128,7 +130,9 @@
     .form{display:grid;gap:14px;}
     .grid-3{display:grid;grid-template-columns:1fr;gap:10px;}
     @media (min-width:768px){.grid-3{grid-template-columns:repeat(3,1fr);}}
+
     label{display:flex;flex-direction:column;gap:6px;color:var(--text);font-weight:600;font-size:.88rem;}
+
     .input,textarea,select{
       width:100%;
       padding:9px 11px;
@@ -141,26 +145,27 @@
       color:var(--text);
     }
     textarea{min-height:90px;resize:vertical;}
+
     .input:focus,textarea:focus,select:focus{
       outline:none;border-color:var(--primary);
       box-shadow:0 0 0 3px rgba(16,185,129,.18);
       background:#fff;
     }
+
     .lab-form .input,.lab-form textarea{border-color:var(--lab-light);}
     .lab-form .input:focus,.lab-form textarea:focus{
       border-color:var(--lab-color);
       box-shadow:0 0 0 3px rgba(139,92,246,.18);
     }
 
-    /* =========================
-       ✅ إصلاح تنظيم النص متعدد الأسطر (الأهداف/المستفيدون)
-       ========================= */
+    /* ✅ تنظيم النص متعدد الأسطر داخل الجدول */
     .multiline{
-      white-space:pre-wrap;   /* يحافظ على Enter */
-      word-break:break-word;  /* يمنع تراكب الكلمات */
+      white-space:pre-wrap;
+      word-break:break-word;
       line-height:1.85;
     }
-    /* تحسين إدخال النص داخل textarea (RTL مضبوط) */
+
+    /* ✅ تحسين إدخال الأهداف/المستفيدين داخل textarea */
     .lab-form textarea{
       direction:rtl;
       text-align:right;
@@ -180,6 +185,7 @@
 
     .actions{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
     @media (min-width:768px){.actions{flex-direction:row;}}
+
     .btn{
       border:none;border-radius:14px;
       padding:9px 16px;font-weight:800;font-size:.9rem;
@@ -296,7 +302,11 @@
     .toast.danger{background:linear-gradient(135deg,#ef4444,#b91c1c);}
     @keyframes fadeIn{from{opacity:0;transform:translate(-50%,-10px);}to{opacity:1;transform:translate(-50%,0);}}
 
-    .site-footer{background:linear-gradient(135deg,var(--primary),var(--dark));color:#fff;padding:15px;text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.15);margin-top:30px;}
+    .site-footer{
+      background:linear-gradient(135deg,var(--primary),var(--dark));
+      color:#fff;padding:15px;text-align:center;
+      box-shadow:0 -4px 20px rgba(0,0,0,.15);margin-top:30px;
+    }
     .site-footer p{margin:5px 0;font-size:14px;}
 
     #back-btn{
@@ -321,11 +331,11 @@
     }
   </style>
 </head>
+
 <body>
 
 <header class="header-logo">
   <div class="wrap">
-    <!-- ديباجة 26 من GitHub -->
     <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" alt="شعار النظام" crossorigin="anonymous">
     <div class="header-text">
       <h1>نظام التقارير الإلكترونية</h1>
@@ -338,69 +348,85 @@
 <nav>
   <div class="nav-container">
     <div class="nav-title">تقارير المدرسة الشاملة</div>
+
     <div class="cards-container">
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/R1397/', 'التقارير')">
         <div class="icon">🗓️</div>
         <div class="title">التقارير</div>
         <div class="subtitle"><span>اليومي</span><span>الأسبوعي</span><span>الشهري</span></div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/A1397/', 'النشاط الطلابي')">
         <div class="icon">🌟</div>
         <div class="title">النشاط الطلابي</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/AC1397/', 'الأنشطة اللاصفية')">
         <div class="icon">🧩</div>
         <div class="title">الأنشطة اللاصفية</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Trace1397/', 'متابعة الأنشطة')">
         <div class="icon">📋</div>
         <div class="title">متابعة الأنشطة</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/L1397/', 'التواصل مع أولياء الأمور')">
         <div class="icon">📞</div>
         <div class="title">التواصل مع أولياء الأمور</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/T1397/', 'التوجيه الطلابي')">
         <div class="icon">🎓</div>
         <div class="title">التوجيه الطلابي</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/V1397/', 'تبادل الزيارات')">
         <div class="icon">📝</div>
         <div class="title">تبادل الزيارات</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/P1397/', 'خريطة نواتج التعلّم')">
         <div class="icon">🗺️</div>
         <div class="title">خريطة نواتج التعلّم</div>
       </div>
+
       <div class="card featured" onclick="loadLocal('wait')">
         <div class="icon">🕒</div>
         <div class="title">حصة الانتظار</div>
       </div>
+
       <div class="card labs" onclick="loadLocal('lab')">
         <div class="icon">🔬</div>
         <div class="title">المختبرات</div>
       </div>
+
       <div class="card featured" onclick="loadLocal('general')">
         <div class="icon">📄</div>
         <div class="title">تقرير عام</div>
         <div class="subtitle"><span>يومي</span><span>أسبوعي</span><span>شهري</span></div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/PLC1397/', 'مجتمعات التعلّم المهنية')">
         <div class="icon">📑</div>
         <div class="title">مجتمعات التعلّم المهنية</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/D1397/', 'التوجيه الصحّي')">
         <div class="icon">⚕️</div>
         <div class="title">التوجيه الصحّي</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/S1397/', 'التعلّم النشط')">
         <div class="icon">♟</div>
         <div class="title">التعلّم النشط</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/LessonA1397/', 'الدرس التطبيقي')">
         <div class="icon">📚</div>
         <div class="title">الدرس التطبيقي</div>
       </div>
+
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Warshah1397/', 'ورش العمل')">
         <div class="icon">🛠️</div>
         <div class="title">ورش العمل</div>
@@ -430,12 +456,14 @@
             <option>الحادي عشر</option><option>الثاني عشر</option><option>الثالث عشر</option><option>الرابع عشر</option><option>الخامس عشر</option>
           </select>
         </label>
+
         <label>اليوم *
           <select class="input" id="dayName" required>
             <option value="">اختاري اليوم</option>
             <option>الأحد</option><option>الإثنين</option><option>الثلاثاء</option><option>الأربعاء</option><option>الخميس</option>
           </select>
         </label>
+
         <label class="date-with-hijri">التاريخ (هجري) *
           <div class="date-input-container">
             <input class="input hijri-date-input" id="sessionDate" required placeholder="اختر التاريخ الهجري" readonly>
@@ -443,6 +471,7 @@
               <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
             </button>
           </div>
+
           <div class="hijri-calendar">
             <div class="hijri-header">
               <div class="hijri-month-year"></div>
@@ -544,6 +573,7 @@
         <label>عدد المستهدفين *
           <input class="input" id="labTargetCount" type="number" min="1" required placeholder="عدد المستهدفين">
         </label>
+
         <label class="date-with-hijri">تاريخ التنفيذ (هجري) *
           <div class="date-input-container">
             <input class="input hijri-date-input" id="labDate" required placeholder="اختر التاريخ الهجري" readonly>
@@ -551,6 +581,7 @@
               <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
             </button>
           </div>
+
           <div class="hijri-calendar">
             <div class="hijri-header">
               <div class="hijri-month-year"></div>
@@ -568,6 +599,7 @@
             <button type="button" class="today-btn">اختر اليوم</button>
           </div>
         </label>
+
         <div></div>
       </div>
 
@@ -654,6 +686,7 @@
               <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
             </button>
           </div>
+
           <div class="hijri-calendar">
             <div class="hijri-header">
               <div class="hijri-month-year"></div>
@@ -720,6 +753,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
   // =================================================================================
   // دوال مساعدة عامة
@@ -754,7 +788,7 @@
       .replace(/'/g, '&#039;');
   }
 
-  // قراءة ملف صورة كـ DataURL لتخزينه في localStorage
+  // قراءة ملف صورة كـ DataURL
   function readFileAsDataURL(file){
     return new Promise((resolve,reject)=>{
       const reader=new FileReader();
@@ -773,6 +807,70 @@
       }
       await new Promise(r=>setTimeout(r,120));
     }catch(e){}
+  }
+
+  // =================================================================================
+  // ✅ حلول iPhone Safari: حفظ آمن + فحص التخزين + ضغط الصور
+  // =================================================================================
+
+  function storageWritable(){
+    try{
+      const k='__t__'+Date.now();
+      localStorage.setItem(k,'1');
+      localStorage.removeItem(k);
+      return true;
+    }catch(e){
+      return false;
+    }
+  }
+
+  function safeLocalStorageSet(key, value){
+    try{
+      localStorage.setItem(key, value);
+      return true;
+    }catch(e){
+      console.error('localStorage setItem failed:', e);
+      return false;
+    }
+  }
+
+  async function readImageAsCompressedDataURL(file, maxW=1280, maxH=1280, quality=0.72){
+    const fallback = await readFileAsDataURL(file);
+
+    try{
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = fallback;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      let w = img.naturalWidth || img.width;
+      let h = img.naturalHeight || img.height;
+
+      const ratio = Math.min(maxW / w, maxH / h, 1);
+      w = Math.round(w * ratio);
+      h = Math.round(h * ratio);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const out = canvas.toDataURL('image/jpeg', quality);
+
+      if(out && out.length < fallback.length) return out;
+      return fallback;
+    }catch(e){
+      console.warn('Compression failed, using original image:', e);
+      return fallback;
+    }
   }
 
   // =================================================================================
@@ -852,7 +950,10 @@
       renderWaitSessions();
     }catch(e){}
   }
-  function waitSaveSessions(){localStorage.setItem('w26_waiting_sessions',JSON.stringify(waitSessions));}
+
+  function waitSaveSessions(){
+    return safeLocalStorageSet('w26_waiting_sessions', JSON.stringify(waitSessions));
+  }
 
   function renderWaitSessions(){
     const body=document.getElementById('sessionsBody');
@@ -867,22 +968,33 @@
         <td>${escapeHtml(s.className)}</td>
         <td>${escapeHtml(s.number)}</td>
         <td>${escapeHtml(s.teacher)}</td>
-        <td class="text-right">${escapeHtml(s.activities)}</td>
-        <td class="text-right">${escapeHtml(s.fields)}</td>
+        <td class="text-right multiline">${escapeHtml(s.activities)}</td>
+        <td class="text-right multiline">${escapeHtml(s.fields)}</td>
         <td><button class="btn danger" style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;" onclick="deleteWaitSession(${i})">حذف</button></td>`;
       body.appendChild(tr);
     });
   }
+
   function deleteWaitSession(i){
     if(!confirm('هل تريدين حذف هذه الحصة؟')) return;
-    waitSessions.splice(i,1);
-    waitSaveSessions();
+    const removed = waitSessions.splice(i,1);
+    const ok = waitSaveSessions();
+    if(!ok){
+      waitSessions.splice(i,0,...removed);
+      showToast('تعذر الحذف بسبب مشكلة التخزين في هذا المتصفح','danger');
+      return;
+    }
     renderWaitSessions();
     showToast('تم حذف الحصة');
   }
 
   function initWaitForm(){
     document.getElementById('saveSession').onclick=function(){
+      if(!storageWritable()){
+        showToast('التصفح الخاص قد يمنع الحفظ على iPhone. أغلقي Private Mode ثم أعيدي المحاولة.','danger');
+        return;
+      }
+
       const week=document.getElementById('weekNumber').value;
       const day=document.getElementById('dayName').value;
       const date=document.getElementById('sessionDate').value;
@@ -890,6 +1002,7 @@
       const number=document.getElementById('sessionNumber').value.trim();
       const teacher=document.getElementById('absentTeacher').value.trim();
       const activities=document.getElementById('activitiesText').value.trim();
+
       const fields=[];
       if(document.getElementById('basicSkills').checked) fields.push('المهارات الأساسية');
       if(document.getElementById('values').checked) fields.push('القيم والمواطنة الصالحة');
@@ -899,8 +1012,15 @@
         showToast('أكملي جميع الحقول واختر مجالاً واحداً على الأقل','warn');
         return;
       }
+
       waitSessions.push({week,day,date,className,number,teacher,activities,fields:fields.join('، ')});
-      waitSaveSessions();
+      const ok = waitSaveSessions();
+      if(!ok){
+        waitSessions.pop();
+        showToast('فشل الحفظ بسبب مساحة التخزين/التصفح الخاص','danger');
+        return;
+      }
+
       renderWaitSessions();
       document.getElementById('sesForm').reset();
       showToast('تم حفظ الحصة');
@@ -909,8 +1029,16 @@
     document.getElementById('clearAll').onclick=function(){
       if(!waitSessions.length){showToast('لا توجد حصص مسجلة','warn');return;}
       if(!confirm('مسح جميع حصص الانتظار؟')) return;
+
+      const backup = [...waitSessions];
       waitSessions=[];
-      waitSaveSessions();
+      const ok = waitSaveSessions();
+      if(!ok){
+        waitSessions = backup;
+        showToast('تعذر المسح بسبب مشكلة التخزين','danger');
+        return;
+      }
+
       renderWaitSessions();
       showToast('تم مسح جميع الحصص');
     };
@@ -932,8 +1060,8 @@
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.className)}</td>
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.number)}</td>
           <td style="border:1px solid #bbf7d0;padding:6px;">${escapeHtml(s.teacher)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;">${escapeHtml(s.activities)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;">${escapeHtml(s.fields)}</td>
+          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;white-space:pre-wrap;">${escapeHtml(s.activities)}</td>
+          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;white-space:pre-wrap;">${escapeHtml(s.fields)}</td>
         </tr>`;
       });
 
@@ -992,7 +1120,7 @@
   }
 
   // =================================================================================
-  // المختبرات
+  // المختبرات (✅ تعديل الحفظ للآيفون)
   // =================================================================================
 
   let labExperiments=[];
@@ -1005,8 +1133,9 @@
     }catch(e){}
   }
 
+  // ✅ حفظ آمن (يرجع true/false)
   function saveLab(){
-    localStorage.setItem('w26_lab_experiments',JSON.stringify(labExperiments));
+    return safeLocalStorageSet('w26_lab_experiments', JSON.stringify(labExperiments));
   }
 
   function renderLab(){
@@ -1017,6 +1146,7 @@
       const evidenceText = (e.evidenceImages && e.evidenceImages.length)
         ? (e.evidenceImages.length + ' صورة')
         : 'لا يوجد';
+
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${i+1}</td>
         <td class="text-right multiline">${escapeHtml(e.program)}</td>
@@ -1039,14 +1169,29 @@
 
   function deleteLab(i){
     if(!confirm('هل تريدين حذف هذا التقرير؟')) return;
-    labExperiments.splice(i,1);
-    saveLab();
+
+    const removed = labExperiments.splice(i,1);
+    const ok = saveLab();
+    if(!ok){
+      labExperiments.splice(i,0,...removed);
+      showToast('تعذر الحذف بسبب مشكلة التخزين على هذا المتصفح','danger');
+      return;
+    }
+
     renderLab();
     showToast('تم حذف التقرير');
   }
 
   async function initLabForm(){
-    document.getElementById('saveLab').onclick=async function(){
+
+    // ✅ زر حفظ المختبرات (حل iPhone: ضغط صور + فحص التخزين + try/catch)
+    document.getElementById('saveLab').onclick = async function () {
+
+      if(!storageWritable()){
+        showToast('التصفح الخاص في Safari يمنع الحفظ. أغلقي Private Mode ثم أعيدي المحاولة.','danger');
+        return;
+      }
+
       const program=document.getElementById('labProgram').value.trim();
       const executor=document.getElementById('labExecutor').value.trim();
       const location=document.getElementById('labLocation').value.trim();
@@ -1062,28 +1207,51 @@
         return;
       }
 
-      // تحويل الصور إلى base64 لتخزينها
-      const evidenceImages=[];
-      for(let i=0;i<files.length;i++){
-        const dataUrl=await readFileAsDataURL(files[i]);
-        evidenceImages.push(dataUrl);
+      const maxImages = 6; // حد مناسب للآيفون
+      const pickCount = Math.min(files.length, maxImages);
+
+      try{
+        showToast('جاري حفظ التقرير...','warn');
+
+        const evidenceImages = [];
+        for(let i=0;i<pickCount;i++){
+          const compressed = await readImageAsCompressedDataURL(files[i], 1280, 1280, 0.72);
+          evidenceImages.push(compressed);
+        }
+
+        const newItem = {
+          program,
+          executor,
+          location,
+          targetCount,
+          date,
+          beneficiaries,
+          goals,
+          evidenceImages
+        };
+
+        labExperiments.push(newItem);
+
+        const ok = saveLab();
+        if(!ok){
+          labExperiments.pop();
+          showToast('فشل الحفظ على الآيفون: مساحة التخزين ممتلئة بسبب الصور. قللي الصور أو احذفي تقارير قديمة.','danger');
+          return;
+        }
+
+        renderLab();
+        document.getElementById('labForm').reset();
+
+        if(files.length > maxImages){
+          showToast(`تم الحفظ ✅ (تم أخذ أول ${maxImages} صور فقط لتفادي مشكلة الآيفون)`,'warn');
+        }else{
+          showToast('تم حفظ التقرير ✅');
+        }
+
+      }catch(e){
+        console.error(e);
+        showToast('صار خطأ أثناء حفظ التقرير على الآيفون. جرّبي تقليل الصور أو تعطيل التصفح الخاص.','danger');
       }
-
-      labExperiments.push({
-        program,
-        executor,
-        location,
-        targetCount,
-        date,
-        beneficiaries,
-        goals,
-        evidenceImages
-      });
-
-      saveLab();
-      renderLab();
-      document.getElementById('labForm').reset();
-      showToast('تم حفظ التقرير');
     };
 
     document.getElementById('clearLabs').onclick=function(){
@@ -1092,8 +1260,16 @@
         return;
       }
       if(!confirm('مسح جميع تقارير المختبرات؟')) return;
+
+      const backup=[...labExperiments];
       labExperiments=[];
-      saveLab();
+      const ok=saveLab();
+      if(!ok){
+        labExperiments=backup;
+        showToast('تعذر المسح بسبب مشكلة التخزين','danger');
+        return;
+      }
+
       renderLab();
       showToast('تم مسح جميع التقارير');
     };
@@ -1182,17 +1358,16 @@
         `;
 
         document.body.appendChild(printDiv);
-        await ensureArabicFontReady(); // ✅ أهم سطر لحل تلخبط الخط في PDF
+        await ensureArabicFontReady();
         const canvas=await captureAsCanvas(printDiv);
         document.body.removeChild(printDiv);
 
         const imgData=canvas.toDataURL('image/jpeg',0.95);
         const imgWidth=pageWidth;
         const imgHeight=(canvas.height*imgWidth)/canvas.width;
-        const positionY=0;
 
         if(i>0) pdf.addPage();
-        pdf.addImage(imgData,'JPEG',0,positionY,imgWidth,imgHeight);
+        pdf.addImage(imgData,'JPEG',0,0,imgWidth,imgHeight);
       }
 
       pdf.save('تقارير المختبرات.pdf');
@@ -1205,6 +1380,7 @@
   // =================================================================================
 
   let generalReports=[];
+
   function loadGeneral(){
     try{
       const saved=localStorage.getItem('w26_general_reports');
@@ -1212,7 +1388,11 @@
       renderGeneral();
     }catch(e){}
   }
-  function saveGeneral(){localStorage.setItem('w26_general_reports',JSON.stringify(generalReports));}
+
+  function saveGeneral(){
+    return safeLocalStorageSet('w26_general_reports', JSON.stringify(generalReports));
+  }
+
   function renderGeneral(){
     const body=document.getElementById('generalBody');
     if(!body) return;
@@ -1230,15 +1410,29 @@
       body.appendChild(tr);
     });
   }
+
   function deleteGeneral(i){
     if(!confirm('حذف هذا التقرير؟')) return;
-    generalReports.splice(i,1);
-    saveGeneral();
+
+    const removed=generalReports.splice(i,1);
+    const ok=saveGeneral();
+    if(!ok){
+      generalReports.splice(i,0,...removed);
+      showToast('تعذر الحذف بسبب مشكلة التخزين','danger');
+      return;
+    }
+
     renderGeneral();
     showToast('تم حذف التقرير');
   }
+
   function initGeneralForm(){
     document.getElementById('saveGeneral').onclick=function(){
+      if(!storageWritable()){
+        showToast('التصفح الخاص قد يمنع الحفظ على iPhone. أغلقي Private Mode ثم أعيدي المحاولة.','danger');
+        return;
+      }
+
       const program=document.getElementById('gProgram').value.trim();
       const executor=document.getElementById('gExecutor').value.trim();
       const location=document.getElementById('gLocation').value.trim();
@@ -1247,23 +1441,41 @@
       const count=document.getElementById('gCount').value.trim();
       const beneficiaries=document.getElementById('gBeneficiaries').value.trim();
       const details=document.getElementById('gDetails').value.trim();
+
       if(!program||!executor||!location||!type||!date||!count||!beneficiaries||!details){
         showToast('أكملي جميع الحقول','warn');return;
       }
+
       generalReports.push({program,executor,location,type,date,count,beneficiaries,details});
-      saveGeneral();
+      const ok=saveGeneral();
+      if(!ok){
+        generalReports.pop();
+        showToast('فشل الحفظ بسبب مساحة التخزين/التصفح الخاص','danger');
+        return;
+      }
+
       renderGeneral();
       document.getElementById('generalForm').reset();
       showToast('تم حفظ التقرير');
     };
+
     document.getElementById('clearGeneral').onclick=function(){
       if(!generalReports.length){showToast('لا توجد تقارير مسجلة','warn');return;}
       if(!confirm('مسح جميع تقارير التقرير العام؟')) return;
+
+      const backup=[...generalReports];
       generalReports=[];
-      saveGeneral();
+      const ok=saveGeneral();
+      if(!ok){
+        generalReports=backup;
+        showToast('تعذر المسح بسبب مشكلة التخزين','danger');
+        return;
+      }
+
       renderGeneral();
       showToast('تم مسح جميع التقارير');
     };
+
     document.getElementById('exportGeneral').onclick=async function(){
       if(!generalReports.length){showToast('لا توجد تقارير مسجلة','warn');return;}
       showToast('جاري تجهيز ملف PDF...','warn');
@@ -1274,6 +1486,7 @@
 
       for(let i=0;i<generalReports.length;i++){
         const rep=generalReports[i];
+
         const printDiv=document.createElement('div');
         printDiv.style.cssText="position:fixed;top:0;left:0;width:794px;background:#fff;padding:40px 40px 30px;z-index:3000;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
 
@@ -1341,10 +1554,9 @@
         const imgData=canvas.toDataURL('image/jpeg',0.95);
         const imgWidth=pageWidth;
         const imgHeight=(canvas.height*imgWidth)/canvas.width;
-        const positionY=0;
 
         if(i>0) pdf.addPage();
-        pdf.addImage(imgData,'JPEG',0,positionY,imgWidth,imgHeight);
+        pdf.addImage(imgData,'JPEG',0,0,imgWidth,imgHeight);
       }
 
       pdf.save('التقارير العامة.pdf');
@@ -1370,6 +1582,7 @@
     const daysContainer=calendar.querySelector('.hijri-days');
 
     monthYear.textContent=HIJRI_MONTH_NAMES[currentHijriMonth-1]+' '+currentHijriYear;
+
     const daysInMonth=30;
     let html='';
     for(let d=1;d<=daysInMonth;d++) html+=`<div class="hijri-day">${d}</div>`;
