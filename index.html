@@ -7,7 +7,6 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
-
     :root{
       --primary:#10b981;
       --secondary:#059669;
@@ -23,7 +22,6 @@
       --card-bg:#ffffff;
       --shadow:0 4px 12px rgba(16,185,129,.1);
     }
-
     *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
     html, body{
       font-family:'Tajawal',sans-serif;
@@ -33,6 +31,13 @@
       min-height:100vh;
       overflow-x:hidden;
       font-size:16px;
+    }
+
+    /* تحسين كتابة العربية داخل الإدخالات */
+    textarea, .input, select{
+      direction: rtl;
+      text-align: right;
+      unicode-bidi: plaintext;
     }
 
     .header-logo{
@@ -54,7 +59,11 @@
       align-items:center;
       flex-direction:column;
     }
-    .header-logo img{height:84px;width:auto;object-fit:contain;}
+    .header-logo img{
+      height:84px;
+      width:auto;
+      object-fit:contain;
+    }
     .header-text{text-align:center;margin-top:10px;}
     .header-text h1{color:var(--dark);font-size:1.8rem;margin-bottom:5px;}
     .header-text p{color:var(--gray);font-size:1rem;}
@@ -128,7 +137,6 @@
     .form{display:grid;gap:14px;}
     .grid-3{display:grid;grid-template-columns:1fr;gap:10px;}
     @media (min-width:768px){.grid-3{grid-template-columns:repeat(3,1fr);}}
-
     label{display:flex;flex-direction:column;gap:6px;color:var(--text);font-weight:600;font-size:.88rem;}
     .input,textarea,select{
       width:100%;
@@ -141,20 +149,7 @@
       transition:all .2s;
       color:var(--text);
     }
-
-    /* ✅ إصلاح الكتابة بالعربي داخل الأهداف وباقي الحقول الطويلة (خصوصًا iPhone) */
-    textarea{
-      min-height:90px;
-      resize:vertical;
-      direction:rtl;
-      text-align:right;
-      unicode-bidi:plaintext;
-      white-space:pre-wrap;
-      word-break:break-word;
-      overflow-wrap:anywhere;
-      line-height:1.9;
-    }
-
+    textarea{min-height:90px;resize:vertical;white-space:pre-wrap;word-break:break-word;}
     .input:focus,textarea:focus,select:focus{
       outline:none;border-color:var(--primary);
       box-shadow:0 0 0 3px rgba(16,185,129,.18);
@@ -165,17 +160,6 @@
       border-color:var(--lab-color);
       box-shadow:0 0 0 3px rgba(139,92,246,.18);
     }
-
-    .chipset{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
-    .chip{
-      display:flex;align-items:center;gap:6px;
-      background:linear-gradient(135deg,#ecfdf5,#dcfce7);
-      padding:7px 10px;border-radius:999px;
-      border:1px solid #bbf7d0;
-      font-size:.82rem;cursor:pointer;transition:all .2s;
-    }
-    .chip input{width:15px;height:15px;accent-color:var(--primary);cursor:pointer;}
-    .chip:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(16,185,129,.25);}
 
     .actions{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
     @media (min-width:768px){.actions{flex-direction:row;}}
@@ -192,71 +176,10 @@
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(16,185,129,.5);}
     .btn:active{transform:scale(.98);}
     .btn.danger{background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 4px 15px rgba(185,28,28,.4);}
-    .btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-
     .lab-form .btn{
       background:linear-gradient(135deg,var(--lab-color),var(--lab-dark));
       box-shadow:0 4px 15px rgba(139,92,246,.4);
     }
-
-    .date-with-hijri{position:relative;}
-    .date-input-container{position:relative;display:flex;align-items:center;}
-    .date-input-container .input{padding-right:44px;cursor:pointer;}
-    .hijri-toggle{
-      position:absolute;left:7px;top:50%;transform:translateY(-50%);
-      background:transparent;border:none;cursor:pointer;
-      width:28px;height:28px;border-radius:999px;
-      display:flex;align-items:center;justify-content:center;
-      transition:all .2s;
-    }
-    .hijri-toggle:hover{background:rgba(16,185,129,.12);}
-    .hijri-icon{width:18px;height:18px;fill:var(--dark);}
-    .hijri-calendar{
-      position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-      background:#fff;border-radius:14px;
-      box-shadow:0 10px 30px rgba(15,118,110,.2);
-      padding:12px;z-index:1500;width:90vw;max-width:320px;
-      border:2px solid #bbf7d0;display:none;
-    }
-    .hijri-calendar.active{display:block;animation:fadeIn .25s ease;}
-    .hijri-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;}
-    .hijri-month-year{font-weight:700;color:var(--dark);font-size:.95rem;}
-    .hijri-nav{display:flex;gap:4px;}
-    .hijri-nav button{
-      background:#ecfdf5;border:none;border-radius:6px;
-      padding:3px 7px;cursor:pointer;font-size:.75rem;
-      font-weight:700;color:var(--dark);transition:all .2s;
-    }
-    .hijri-nav button:hover{background:var(--primary);color:#fff;}
-    .hijri-weekdays{
-      display:grid;grid-template-columns:repeat(7,1fr);
-      text-align:center;font-weight:700;color:var(--dark);
-      font-size:.75rem;margin-bottom:4px;
-    }
-    .hijri-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-    .hijri-day{
-      padding:6px 2px;text-align:center;border-radius:6px;
-      cursor:pointer;font-size:.78rem;color:var(--text);
-      transition:all .2s;
-    }
-    .hijri-day:hover{background:#ecfdf5;}
-    .hijri-day.selected{background:var(--primary);color:#fff;}
-    .today-btn{
-      margin-top:8px;width:100%;padding:7px 10px;
-      border:none;border-radius:8px;cursor:pointer;
-      font-weight:700;font-size:.8rem;
-      background:#ecfdf5;color:var(--dark);
-      transition:all .2s;
-    }
-    .today-btn:hover{background:var(--primary);color:#fff;}
-
-    .wait-subtitle,.lab-subtitle,.general-subtitle{
-      margin-top:20px;margin-bottom:8px;font-size:1.05rem;
-      color:var(--dark);font-weight:800;border-right:4px solid var(--accent);
-      padding-right:8px;
-    }
-    .lab-subtitle{border-right-color:var(--lab-color);color:var(--lab-dark);}
-    .general-subtitle{border-right-color:#0ea5e9;color:#075985;}
 
     .table-wrap{
       margin-top:8px;border-radius:12px;overflow:hidden;
@@ -264,16 +187,15 @@
       overflow-x:auto;background:#fff;
     }
     table{width:100%;border-collapse:collapse;min-width:750px;font-size:.8rem;}
-    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;vertical-align:top;}
+    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;}
     th{
       background:linear-gradient(135deg,var(--primary),var(--secondary));
       color:#fff;font-weight:800;font-size:.78rem;white-space:nowrap;
     }
     .lab-table th{background:linear-gradient(135deg,var(--lab-color),var(--lab-dark));}
-    .general-table th{background:linear-gradient(135deg,#0ea5e9,#0369a1);}
     tbody tr:nth-child(even){background:#f9fafb;}
     tbody tr:hover{background:#ecfdf5;}
-    td.text-right{text-align:right; direction:rtl; unicode-bidi:plaintext; white-space:pre-wrap; word-break:break-word; overflow-wrap:anywhere;}
+    td.text-right{text-align:right;}
 
     .report-header{
       background:linear-gradient(135deg,#14532d,#166534);
@@ -291,11 +213,10 @@
       background:linear-gradient(135deg,var(--primary),var(--secondary));
       color:#fff;padding:9px 14px;border-radius:999px;
       font-size:.85rem;font-weight:700;box-shadow:0 8px 20px rgba(15,118,110,.4);
-      z-index:2000;animation:fadeIn .25s ease;max-width:90%;text-align:center;
+      z-index:2000;max-width:90%;text-align:center;
     }
     .toast.warn{background:linear-gradient(135deg,#facc15,#eab308);color:#111827;}
     .toast.danger{background:linear-gradient(135deg,#ef4444,#b91c1c);}
-    @keyframes fadeIn{from{opacity:0;transform:translate(-50%,-10px);}to{opacity:1;transform:translate(-50%,0);}}
 
     .site-footer{background:linear-gradient(135deg,var(--primary),var(--dark));color:#fff;padding:15px;text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.15);margin-top:30px;}
     .site-footer p{margin:5px 0;font-size:14px;}
@@ -346,41 +267,6 @@
         <div class="subtitle"><span>اليومي</span><span>الأسبوعي</span><span>الشهري</span></div>
       </div>
 
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/A1397/', 'النشاط الطلابي')">
-        <div class="icon">🌟</div>
-        <div class="title">النشاط الطلابي</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/AC1397/', 'الأنشطة اللاصفية')">
-        <div class="icon">🧩</div>
-        <div class="title">الأنشطة اللاصفية</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Trace1397/', 'متابعة الأنشطة')">
-        <div class="icon">📋</div>
-        <div class="title">متابعة الأنشطة</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/L1397/', 'التواصل مع أولياء الأمور')">
-        <div class="icon">📞</div>
-        <div class="title">التواصل مع أولياء الأمور</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/T1397/', 'التوجيه الطلابي')">
-        <div class="icon">🎓</div>
-        <div class="title">التوجيه الطلابي</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/V1397/', 'تبادل الزيارات')">
-        <div class="icon">📝</div>
-        <div class="title">تبادل الزيارات</div>
-      </div>
-
-      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/P1397/', 'خريطة نواتج التعلّم')">
-        <div class="icon">🗺️</div>
-        <div class="title">خريطة نواتج التعلّم</div>
-      </div>
-
       <div class="card featured" onclick="window.loadLocal && window.loadLocal('wait')">
         <div class="icon">🕒</div>
         <div class="title">حصة الانتظار</div>
@@ -397,26 +283,51 @@
         <div class="subtitle"><span>يومي</span><span>أسبوعي</span><span>شهري</span></div>
       </div>
 
+      <!-- باقي روابطك كما هي -->
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/A1397/', 'النشاط الطلابي')">
+        <div class="icon">🌟</div>
+        <div class="title">النشاط الطلابي</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/AC1397/', 'الأنشطة اللاصفية')">
+        <div class="icon">🧩</div>
+        <div class="title">الأنشطة اللاصفية</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Trace1397/', 'متابعة الأنشطة')">
+        <div class="icon">📋</div>
+        <div class="title">متابعة الأنشطة</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/L1397/', 'التواصل مع أولياء الأمور')">
+        <div class="icon">📞</div>
+        <div class="title">التواصل مع أولياء الأمور</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/T1397/', 'التوجيه الطلابي')">
+        <div class="icon">🎓</div>
+        <div class="title">التوجيه الطلابي</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/V1397/', 'تبادل الزيارات')">
+        <div class="icon">📝</div>
+        <div class="title">تبادل الزيارات</div>
+      </div>
+      <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/P1397/', 'خريطة نواتج التعلّم')">
+        <div class="icon">🗺️</div>
+        <div class="title">خريطة نواتج التعلّم</div>
+      </div>
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/PLC1397/', 'مجتمعات التعلّم المهنية')">
         <div class="icon">📑</div>
         <div class="title">مجتمعات التعلّم المهنية</div>
       </div>
-
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/D1397/', 'التوجيه الصحّي')">
         <div class="icon">⚕️</div>
         <div class="title">التوجيه الصحّي</div>
       </div>
-
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/S1397/', 'التعلّم النشط')">
         <div class="icon">♟</div>
         <div class="title">التعلّم النشط</div>
       </div>
-
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/LessonA1397/', 'الدرس التطبيقي')">
         <div class="icon">📚</div>
         <div class="title">الدرس التطبيقي</div>
       </div>
-
       <div class="card" onclick="loadInIframe('https://defullah2010-svg.github.io/Warshah1397/', 'ورش العمل')">
         <div class="icon">🛠️</div>
         <div class="title">ورش العمل</div>
@@ -426,115 +337,6 @@
 </nav>
 
 <main id="local-pages">
-
-  <!-- حصة الانتظار -->
-  <section id="wait-section" class="card-page" style="display:none;">
-    <div class="report-header">
-      <h2>تقرير تنفيذ</h2>
-      <div class="ministry">وزارة التعليم</div>
-      <div class="program-title">حصة الانتظار</div>
-    </div>
-
-    <p class="wait-intro">سجلي تفاصيل حصص الانتظار التي قمتِ بتنفيذها. يتم حفظ البيانات محلياً في المتصفح.</p>
-
-    <form id="sesForm" class="form">
-      <div class="grid-3">
-        <label>الأسبوع *
-          <select class="input" id="weekNumber" required>
-            <option value="">اختاري الأسبوع</option>
-            <option>الأول</option><option>الثاني</option><option>الثالث</option><option>الرابع</option><option>الخامس</option>
-            <option>السادس</option><option>السابع</option><option>الثامن</option><option>التاسع</option><option>العاشر</option>
-            <option>الحادي عشر</option><option>الثاني عشر</option><option>الثالث عشر</option><option>الرابع عشر</option><option>الخامس عشر</option>
-          </select>
-        </label>
-
-        <label>اليوم *
-          <select class="input" id="dayName" required>
-            <option value="">اختاري اليوم</option>
-            <option>الأحد</option><option>الإثنين</option><option>الثلاثاء</option><option>الأربعاء</option><option>الخميس</option>
-          </select>
-        </label>
-
-        <label class="date-with-hijri">التاريخ (هجري) *
-          <div class="date-input-container">
-            <input class="input hijri-date-input" id="sessionDate" required placeholder="اختر التاريخ الهجري" readonly>
-            <button type="button" class="hijri-toggle">
-              <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
-            </button>
-          </div>
-          <div class="hijri-calendar">
-            <div class="hijri-header">
-              <div class="hijri-month-year"></div>
-              <div class="hijri-nav">
-                <button type="button" class="prev-year">«</button>
-                <button type="button" class="prev-month">‹</button>
-                <button type="button" class="next-month">›</button>
-                <button type="button" class="next-year">»</button>
-              </div>
-            </div>
-            <div class="hijri-weekdays">
-              <span>ح</span><span>ن</span><span>ث</span><span>ر</span><span>خ</span><span>ج</span><span>س</span>
-            </div>
-            <div class="hijri-days"></div>
-            <button type="button" class="today-btn">اختر اليوم</button>
-          </div>
-        </label>
-      </div>
-
-      <div class="grid-3">
-        <label>الصف / الفصل *
-          <input class="input" id="className" required placeholder="مثال: 2 / أ">
-        </label>
-        <label>رقم الحصة *
-          <input class="input" id="sessionNumber" required placeholder="مثال: 3">
-        </label>
-        <label>المعلمة الغائبة *
-          <input class="input" id="absentTeacher" required placeholder="مثال: أ/ سارة محمد">
-        </label>
-      </div>
-
-      <label>ما تم تنفيذه مع الطالبات *
-        <textarea class="input" id="activitiesText" required placeholder="اكتبي بإيجاز ما تم عمله في حصة الانتظار..."></textarea>
-      </label>
-
-      <label>المجال / نوع النشاط *
-        <div class="chipset">
-          <label class="chip">
-            <input type="checkbox" id="basicSkills">
-            <span>المهارات الأساسية</span>
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="values">
-            <span>القيم والمواطنة الصالحة</span>
-          </label>
-          <label class="chip">
-            <input type="checkbox" id="futureSkills">
-            <span>مهارات المستقبل</span>
-          </label>
-        </div>
-      </label>
-
-      <div class="actions">
-        <button class="btn" type="button" id="saveSessionBtn">حفظ الحصة</button>
-        <button class="btn" type="button" id="exportSessionsBtn">تصدير جميع الحصص PDF</button>
-        <button class="btn danger" type="button" id="clearAllBtn">مسح جميع الحصص</button>
-      </div>
-    </form>
-
-    <h3 class="wait-subtitle">الحصص المسجلة</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-        <tr>
-          <th>م</th><th>الأسبوع</th><th>اليوم</th><th>التاريخ</th>
-          <th>الصف</th><th>الحصة</th><th>المعلمة الغائبة</th>
-          <th>ما تم تنفيذه</th><th>المجال</th><th>إجراء</th>
-        </tr>
-        </thead>
-        <tbody id="sessionsBody"></tbody>
-      </table>
-    </div>
-  </section>
 
   <!-- المختبرات -->
   <section id="lab-section" class="card-page" style="display:none;">
@@ -546,7 +348,7 @@
 
     <p class="lab-intro">سجلي تفاصيل التجارب والبرامج المنفذة في المختبرات. يتم حفظ البيانات محلياً في المتصفح.</p>
 
-    <form id="labForm" class="form lab-form">
+    <form id="labForm" class="form lab-form" onsubmit="return false;">
       <div class="grid-3">
         <label>اسم البرنامج / التجربة *
           <input class="input" id="labProgram" required placeholder="اسم البرنامج أو التجربة">
@@ -563,30 +365,8 @@
         <label>عدد المستهدفين *
           <input class="input" id="labTargetCount" type="number" min="1" required placeholder="عدد المستهدفين">
         </label>
-
-        <label class="date-with-hijri">تاريخ التنفيذ (هجري) *
-          <div class="date-input-container">
-            <input class="input hijri-date-input" id="labDate" required placeholder="اختر التاريخ الهجري" readonly>
-            <button type="button" class="hijri-toggle">
-              <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
-            </button>
-          </div>
-          <div class="hijri-calendar">
-            <div class="hijri-header">
-              <div class="hijri-month-year"></div>
-              <div class="hijri-nav">
-                <button type="button" class="prev-year">«</button>
-                <button type="button" class="prev-month">‹</button>
-                <button type="button" class="next-month">›</button>
-                <button type="button" class="next-year">»</button>
-              </div>
-            </div>
-            <div class="hijri-weekdays">
-              <span>ح</span><span>ن</span><span>ث</span><span>ر</span><span>خ</span><span>ج</span><span>س</span>
-            </div>
-            <div class="hijri-days"></div>
-            <button type="button" class="today-btn">اختر اليوم</button>
-          </div>
+        <label>تاريخ التنفيذ (هجري) *
+          <input class="input" id="labDate" required placeholder="مثال: 1447/1/13">
         </label>
         <div></div>
       </div>
@@ -599,132 +379,38 @@
         <textarea class="input" id="labGoals" required placeholder="اكتبي أهداف البرنامج أو التجربة..."></textarea>
       </label>
 
-      <label>الشواهد (صور) * (حد أقصى 4 صور)
+      <label>الشواهد (صور) — حدها 4 *
         <input class="input" id="labEvidence" type="file" accept="image/*" multiple required>
-        <small style="font-weight:400;color:#6b7280;margin-top:2px;">
-          تنبيه: الحد الأعلى 4 صور فقط. (وأنا ضغطتها تلقائياً قبل الحفظ حتى ما ينفجر التخزين في الجوال)
-        </small>
+        <small style="font-weight:400;color:#6b7280;margin-top:2px;">اختاري حتى 4 صور فقط.</small>
       </label>
 
       <div class="actions">
-        <button class="btn" type="button" id="saveLabBtn">حفظ التقرير</button>
-        <button class="btn" type="button" id="exportLabsBtn">تصدير جميع التقارير PDF</button>
-        <button class="btn danger" type="button" id="clearLabsBtn">مسح جميع التقارير</button>
+        <button class="btn" type="button" id="saveLab">حفظ التقرير</button>
+        <button class="btn" type="button" id="exportLabs">تصدير تقارير المختبرات (PDF/طباعة)</button>
+        <button class="btn danger" type="button" id="clearLabs">مسح جميع التقارير</button>
       </div>
     </form>
 
-    <h3 class="lab-subtitle">التقارير المسجلة</h3>
+    <h3 style="margin-top:20px;margin-bottom:8px;font-size:1.05rem;color:var(--lab-dark);font-weight:800;border-right:4px solid var(--lab-color);padding-right:8px;">
+      التقارير المسجلة
+    </h3>
+
     <div class="table-wrap">
       <table class="lab-table">
         <thead>
-        <tr>
-          <th>م</th>
-          <th>البرنامج / التجربة</th>
-          <th>المنفذة</th>
-          <th>تاريخ التنفيذ</th>
-          <th>عدد المستهدفين</th>
-          <th>المستفيدون</th>
-          <th>الأهداف</th>
-          <th>الشواهد (صور)</th>
-          <th>إجراء</th>
-        </tr>
+          <tr>
+            <th>م</th>
+            <th>البرنامج / التجربة</th>
+            <th>المنفذة</th>
+            <th>تاريخ التنفيذ</th>
+            <th>عدد المستهدفين</th>
+            <th>المستفيدون</th>
+            <th>الأهداف</th>
+            <th>الشواهد</th>
+            <th>إجراء</th>
+          </tr>
         </thead>
         <tbody id="labsBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التقرير العام -->
-  <section id="general-section" class="card-page" style="display:none;">
-    <div class="report-header" style="background:linear-gradient(135deg,#0f766e,#0e7490);">
-      <h2>التقرير العام</h2>
-      <div class="ministry">وزارة التعليم</div>
-      <div class="program-title">تقرير تنفيذ برنامج / فعالية</div>
-    </div>
-
-    <p class="general-intro">استخدمي هذا النموذج لتوثيق أي برنامج أو فعالية (عام / يومي / أسبوعي / شهري).</p>
-
-    <form id="generalForm" class="form">
-      <div class="grid-3">
-        <label>اسم البرنامج / الفعالية *
-          <input class="input" id="gProgram" required placeholder="اسم البرنامج / الفعالية">
-        </label>
-        <label>المنفذة *
-          <input class="input" id="gExecutor" required placeholder="اسم المنفذة">
-        </label>
-        <label>مكان التنفيذ *
-          <input class="input" id="gLocation" required placeholder="مكان التنفيذ (مثال: مسرح المدرسة)">
-        </label>
-      </div>
-
-      <div class="grid-3">
-        <label>نوع التقرير *
-          <select class="input" id="gType" required>
-            <option value="">اختاري النوع</option>
-            <option>يومي</option>
-            <option>أسبوعي</option>
-            <option>شهري</option>
-            <option>فصلي</option>
-            <option>عام</option>
-          </select>
-        </label>
-
-        <label class="date-with-hijri">تاريخ التنفيذ (هجري) *
-          <div class="date-input-container">
-            <input class="input hijri-date-input" id="gDate" required placeholder="اختر التاريخ الهجري" readonly>
-            <button type="button" class="hijri-toggle">
-              <svg class="hijri-icon" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2zm0 4h7v2H7v-2z"/></svg>
-            </button>
-          </div>
-          <div class="hijri-calendar">
-            <div class="hijri-header">
-              <div class="hijri-month-year"></div>
-              <div class="hijri-nav">
-                <button type="button" class="prev-year">«</button>
-                <button type="button" class="prev-month">‹</button>
-                <button type="button" class="next-month">›</button>
-                <button type="button" class="next-year">»</button>
-              </div>
-            </div>
-            <div class="hijri-weekdays">
-              <span>ح</span><span>ن</span><span>ث</span><span>ر</span><span>خ</span><span>ج</span><span>س</span>
-            </div>
-            <div class="hijri-days"></div>
-            <button type="button" class="today-btn">اختر اليوم</button>
-          </div>
-        </label>
-
-        <label>عدد المستفيدين *
-          <input class="input" id="gCount" type="number" min="1" required placeholder="عدد المستفيدين">
-        </label>
-      </div>
-
-      <label>المستفيدون *
-        <textarea class="input" id="gBeneficiaries" required placeholder="اكتبي الفئة المستفيدة (مثال: طالبات الصفوف العليا، معلمات المدرسة...)"></textarea>
-      </label>
-
-      <label>أبرز ما تم تنفيذه *
-        <textarea class="input" id="gDetails" required placeholder="سجلي بإيجاز أهم ما تم في البرنامج / الفعالية..."></textarea>
-      </label>
-
-      <div class="actions">
-        <button class="btn" type="button" id="saveGeneralBtn">حفظ التقرير</button>
-        <button class="btn" type="button" id="exportGeneralBtn">تصدير جميع التقارير PDF</button>
-        <button class="btn danger" type="button" id="clearGeneralBtn">مسح جميع التقارير</button>
-      </div>
-    </form>
-
-    <h3 class="general-subtitle">التقارير المسجلة</h3>
-    <div class="table-wrap">
-      <table class="general-table">
-        <thead>
-        <tr>
-          <th>م</th><th>اسم البرنامج</th><th>نوع التقرير</th>
-          <th>تاريخ التنفيذ</th><th>عدد المستفيدين</th>
-          <th>المستفيدون</th><th>أبرز ما تم</th><th>إجراء</th>
-        </tr>
-        </thead>
-        <tbody id="generalBody"></tbody>
       </table>
     </div>
   </section>
@@ -741,19 +427,11 @@
 
 <button id="back-btn">← العودة للرئيسية</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-  // ============================================================================
-  // Helpers
-  // ============================================================================
-
-  function isIOS(){
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  }
-
-  window.showToast = function(msg,type){
+  // =======================
+  // Toast
+  // =======================
+  function showToast(msg,type){
     type = type || '';
     const t=document.createElement('div');
     t.className='toast'+(type?' '+type:'');
@@ -761,82 +439,22 @@
     document.body.appendChild(t);
     setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .25s';},1400);
     setTimeout(()=>{t.remove();},1900);
-  };
-
-  function getJsPDF(){
-    if(window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
-    if(window.jsPDF) return window.jsPDF;
-    throw new Error('jsPDF library not loaded');
   }
 
-  window.escapeHtml = function(text){
-    if(text === null || text === undefined) return '';
+  function escapeHtml(text){
+    if(!text) return '';
     return String(text)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
-  };
-
-  // ✅ تحويل الأسطر الجديدة لعرض صحيح في الجدول + PDF
-  window.nl2brSafe = function(text){
-    return window.escapeHtml(text || '').replace(/\n/g, '<br>');
-  };
-
-  // ✅ html2canvas على iPhone ممكن يعطي شاشة سوداء إذا العنصر fixed/كبير/scale عالي
-  function captureAsCanvas(el){
-    const scale = isIOS() ? 1 : 1.5;
-    return html2canvas(el,{
-      scale,
-      backgroundColor:'#ffffff',
-      useCORS:true,
-      logging:false,
-      removeContainer:true
-    });
   }
 
-  // ضغط صورة لتقليل حجم التخزين (مهم للجوال + localStorage)
-  function compressImageToDataURL(file, maxW=1280, quality=0.82){
-    return new Promise((resolve,reject)=>{
-      const reader=new FileReader();
-      reader.onerror = reject;
-      reader.onload = () => {
-        const img = new Image();
-        img.onerror = reject;
-        img.onload = () => {
-          let w = img.width;
-          let h = img.height;
-          if(w > maxW){
-            const r = maxW / w;
-            w = Math.round(w * r);
-            h = Math.round(h * r);
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(0,0,w,h);
-          ctx.drawImage(img,0,0,w,h);
-          try{
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            resolve(dataUrl);
-          }catch(e){
-            reject(e);
-          }
-        };
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  // ============================================================================
-  // Navigation
-  // ============================================================================
-
-  window.loadInIframe = function(url,title){
+  // =======================
+  // Navigation (كما عندك)
+  // =======================
+  function loadInIframe(url,title){
     const iframeContainer=document.getElementById('iframe-container');
     const iframe=document.getElementById('content-frame');
     const nav=document.querySelector('nav');
@@ -846,9 +464,7 @@
     document.title=(title||'تقرير')+' - نظام التقارير الإلكترونية';
 
     localPages.style.display='none';
-    document.getElementById('wait-section').style.display='none';
     document.getElementById('lab-section').style.display='none';
-    document.getElementById('general-section').style.display='none';
 
     iframe.src=url;
     iframeContainer.style.display='block';
@@ -864,7 +480,7 @@
       backBtn.style.display='none';
       window.scrollTo({top:0,behavior:'smooth'});
     };
-  };
+  }
 
   window.loadLocal = function(which){
     const iframeContainer=document.getElementById('iframe-container');
@@ -876,249 +492,69 @@
     document.getElementById('content-frame').src='about:blank';
 
     localPages.style.display='block';
-    document.getElementById('wait-section').style.display= which==='wait' ? 'block' : 'none';
     document.getElementById('lab-section').style.display = which==='lab' ? 'block' : 'none';
-    document.getElementById('general-section').style.display = which==='general' ? 'block' : 'none';
 
-    document.title=(which==='wait'?'حصة الانتظار':which==='lab'?'المختبرات':'التقرير العام')+' - نظام التقارير الإلكترونية';
+    document.title=(which==='lab'?'المختبرات':'نظام التقارير الإلكترونية')+' - نظام التقارير الإلكترونية';
     nav.style.display='block';
     backBtn.style.display='block';
     localPages.scrollIntoView({behavior:'smooth'});
 
     backBtn.onclick=function(){
       localPages.style.display='none';
-      document.getElementById('wait-section').style.display='none';
       document.getElementById('lab-section').style.display='none';
-      document.getElementById('general-section').style.display='none';
       document.title='نظام التقارير الإلكترونية';
       backBtn.style.display='none';
       window.scrollTo({top:0,behavior:'smooth'});
     };
-  };
-
-  // ============================================================================
-  // Waiting sessions (حصة الانتظار)
-  // ============================================================================
-
-  let waitSessions=[];
-  const WAIT_KEY = 'w26_waiting_sessions';
-
-  function waitLoad(){
-    try{
-      const saved=localStorage.getItem(WAIT_KEY);
-      waitSessions = saved ? (JSON.parse(saved)||[]) : [];
-    }catch(e){
-      waitSessions=[];
-    }
-    renderWait();
   }
 
-  function waitPersist(){
-    localStorage.setItem(WAIT_KEY, JSON.stringify(waitSessions));
-  }
-
-  function renderWait(){
-    const body=document.getElementById('sessionsBody');
-    if(!body) return;
-    body.innerHTML='';
-    waitSessions.forEach((s,i)=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${i+1}</td>
-        <td>${window.escapeHtml(s.week)}</td>
-        <td>${window.escapeHtml(s.day)}</td>
-        <td>${window.escapeHtml(s.date)}</td>
-        <td>${window.escapeHtml(s.className)}</td>
-        <td>${window.escapeHtml(s.number)}</td>
-        <td>${window.escapeHtml(s.teacher)}</td>
-        <td class="text-right">${window.nl2brSafe(s.activities)}</td>
-        <td class="text-right">${window.escapeHtml(s.fields)}</td>
-        <td><button class="btn danger" style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;" onclick="deleteWait(${i})">حذف</button></td>`;
-      body.appendChild(tr);
-    });
-  }
-
-  window.deleteWait = function(i){
-    if(!confirm('هل تريدين حذف هذه الحصة؟')) return;
-    waitSessions.splice(i,1);
-    waitPersist();
-    renderWait();
-    window.showToast('تم حذف الحصة');
-  };
-
-  function initWaitForm(){
-    document.getElementById('saveSessionBtn').addEventListener('click', ()=>{
-      const week=document.getElementById('weekNumber').value;
-      const day=document.getElementById('dayName').value;
-      const date=document.getElementById('sessionDate').value;
-      const className=document.getElementById('className').value.trim();
-      const number=document.getElementById('sessionNumber').value.trim();
-      const teacher=document.getElementById('absentTeacher').value.trim();
-      const activities=document.getElementById('activitiesText').value.trim();
-
-      const fields=[];
-      if(document.getElementById('basicSkills').checked) fields.push('المهارات الأساسية');
-      if(document.getElementById('values').checked) fields.push('القيم والمواطنة الصالحة');
-      if(document.getElementById('futureSkills').checked) fields.push('مهارات المستقبل');
-
-      if(!week||!day||!date||!className||!number||!teacher||!activities||fields.length===0){
-        window.showToast('أكملي جميع الحقول واختر مجالاً واحداً على الأقل','warn');
-        return;
-      }
-
-      waitSessions.push({week,day,date,className,number,teacher,activities,fields:fields.join('، ')});
-      waitPersist();
-      renderWait();
-      document.getElementById('sesForm').reset();
-      window.showToast('تم حفظ الحصة');
-    });
-
-    document.getElementById('clearAllBtn').addEventListener('click', ()=>{
-      if(!waitSessions.length){window.showToast('لا توجد حصص مسجلة','warn');return;}
-      if(!confirm('مسح جميع حصص الانتظار؟')) return;
-      waitSessions=[];
-      waitPersist();
-      renderWait();
-      window.showToast('تم مسح جميع الحصص');
-    });
-
-    document.getElementById('exportSessionsBtn').addEventListener('click', async ()=>{
-      if(!waitSessions.length){window.showToast('لا توجد حصص مسجلة','warn');return;}
-      window.showToast('جاري تجهيز ملف PDF...','warn');
-
-      // ✅ مهم: لا نستخدم position:fixed (يسبب شاشة سوداء على iPhone)
-      const printDiv=document.createElement('div');
-      printDiv.style.cssText="position:absolute;left:-10000px;top:0;width:1123px;background:#fff;padding:30px;direction:rtl;font-family:'Tajawal',sans-serif;font-size:14px;";
-
-      let rows='';
-      waitSessions.forEach((s,i)=>{
-        rows+=`<tr>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${i+1}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.week||'')}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.day)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.date)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.className)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.number)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;">${window.escapeHtml(s.teacher)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">${window.nl2brSafe(s.activities)}</td>
-          <td style="border:1px solid #bbf7d0;padding:6px;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">${window.escapeHtml(s.fields)}</td>
-        </tr>`;
-      });
-
-      printDiv.innerHTML=`
-        <div style="text-align:center;margin-bottom:14px;">
-          <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" crossorigin="anonymous"
-               style="width:100%;height:60px;object-fit:contain;margin-bottom:6px;">
-          <h1 style="color:#047857;font-size:20px;margin:0 0 6px;font-weight:900;border-bottom:1px solid #bbf7d0;padding-bottom:6px;">
-            تقارير حصص الانتظار
-          </h1>
-        </div>
-        <table style="width:100%;border-collapse:collapse;font-size:13px;">
-          <thead>
-            <tr>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">م</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">الأسبوع</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">اليوم</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">التاريخ</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">الصف</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">الحصة</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">المعلمة الغائبة</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">ما تم تنفيذه</th>
-              <th style="border:1px solid #bbf7d0;background:#16a34a;color:#fff;padding:6px;">المجال</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-
-        <div style="margin-top:20px;padding-top:6px;border-top:1px solid #bbf7d0;text-align:left;direction:ltr;">
-          <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
-          <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
-        </div>
-      `;
-
-      document.body.appendChild(printDiv);
-      const canvas=await captureAsCanvas(printDiv);
-      printDiv.remove();
-
-      const imgData=canvas.toDataURL('image/jpeg',0.92);
-
-      const JsPDF=getJsPDF();
-      const pdf=new JsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-      const pageWidth=pdf.internal.pageSize.getWidth();
-      const pageHeight=pdf.internal.pageSize.getHeight();
-
-      const imgWidth=pageWidth;
-      const imgHeight=(canvas.height*imgWidth)/canvas.width;
-
-      let heightLeft=imgHeight;
-      let position=0;
-
-      pdf.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
-      heightLeft -= pageHeight;
-
-      while(heightLeft > 0){
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('تقارير حصص الانتظار.pdf');
-      window.showToast('تم تصدير ملف PDF');
-    });
-  }
-
-  // ============================================================================
-  // Labs (المختبرات) — ✅ حل زر الحفظ + حد الصور 4 + إصلاح الأهداف + حد التقرير
-  // ============================================================================
-
+  // =======================
+  // LABS: Storage
+  // =======================
   let labExperiments=[];
-  const LAB_KEY = 'w26_lab_experiments';
 
-  function labLoad(){
+  function loadLab(){
     try{
-      const saved=localStorage.getItem(LAB_KEY);
-      labExperiments = saved ? (JSON.parse(saved)||[]) : [];
+      const saved=localStorage.getItem('w26_lab_experiments');
+      if(saved) labExperiments=JSON.parse(saved)||[];
     }catch(e){
       labExperiments=[];
     }
-    labRender();
+    renderLab();
   }
 
-  // ✅ مهم: لا نسميها saveLab لأن ID الزر/العنصر كان يكسّر الدالة على iPhone
-  function labPersist(){
+  function saveLabToStorage(){
     try{
-      localStorage.setItem(LAB_KEY, JSON.stringify(labExperiments));
+      localStorage.setItem('w26_lab_experiments',JSON.stringify(labExperiments));
+      return true;
     }catch(e){
-      window.showToast('التخزين امتلأ. قللي حجم الصور أو احذفي تقارير قديمة','danger');
-      throw e;
+      // غالبًا QuotaExceededError
+      showToast('تعذر الحفظ: مساحة التخزين ممتلئة. قللي الصور/استخدمي 4 صور فقط.','danger');
+      return false;
     }
   }
 
-  function labRender(){
+  function renderLab(){
     const body=document.getElementById('labsBody');
     if(!body) return;
-
     body.innerHTML='';
     labExperiments.forEach((e,i)=>{
       const evidenceText = (e.evidenceImages && e.evidenceImages.length)
         ? (e.evidenceImages.length + ' صورة')
         : 'لا يوجد';
-
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${i+1}</td>
-        <td class="text-right">${window.escapeHtml(e.program)}</td>
-        <td>${window.escapeHtml(e.executor)}</td>
-        <td>${window.escapeHtml(e.date)}</td>
-        <td>${window.escapeHtml(e.targetCount)}</td>
-        <td class="text-right">${window.nl2brSafe(e.beneficiaries)}</td>
-        <td class="text-right">${window.nl2brSafe(e.goals)}</td>
-        <td class="text-right">${window.escapeHtml(evidenceText)}</td>
+        <td class="text-right">${escapeHtml(e.program)}</td>
+        <td>${escapeHtml(e.executor)}</td>
+        <td>${escapeHtml(e.date)}</td>
+        <td>${escapeHtml(e.targetCount)}</td>
+        <td class="text-right">${escapeHtml(e.beneficiaries)}</td>
+        <td class="text-right">${escapeHtml(e.goals || '')}</td>
+        <td>${escapeHtml(evidenceText)}</td>
         <td>
           <button class="btn danger"
-                  style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;"
-                  onclick="deleteLab(${i})">
-            حذف
-          </button>
+            style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;"
+            onclick="deleteLab(${i})">حذف</button>
         </td>`;
       body.appendChild(tr);
     });
@@ -1127,22 +563,50 @@
   window.deleteLab = function(i){
     if(!confirm('هل تريدين حذف هذا التقرير؟')) return;
     labExperiments.splice(i,1);
-    labPersist();
-    labRender();
-    window.showToast('تم حذف التقرير');
-  };
+    saveLabToStorage();
+    renderLab();
+    showToast('تم حذف التقرير');
+  }
 
-  function initLabForm(){
-    const evidenceInput = document.getElementById('labEvidence');
-    const saveBtn = document.getElementById('saveLabBtn');
+  // =======================
+  // LABS: Image compress (حل جذري لتعطل الحفظ على iPhone)
+  // =======================
+  function compressImageToDataURL(file, maxW=1280, maxH=1280, quality=0.82){
+    return new Promise((resolve,reject)=>{
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('FileReader error'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Image decode error'));
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          const ratio = Math.min(maxW / w, maxH / h, 1);
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
 
-    // ✅ حد 4 صور فقط
-    evidenceInput.addEventListener('change', ()=>{
-      if(evidenceInput.files && evidenceInput.files.length > 4){
-        window.showToast('مسموح 4 صور فقط. اختاري 4 أو أقل.','warn');
-        evidenceInput.value = '';
-      }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          // JPEG أصغر بكثير من PNG
+          const dataURL = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataURL);
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
     });
+  }
+
+  // =======================
+  // LABS: Save
+  // =======================
+  function initLabForm(){
+    const saveBtn = document.getElementById('saveLab');
+    const exportBtn = document.getElementById('exportLabs');
+    const clearBtn = document.getElementById('clearLabs');
 
     saveBtn.addEventListener('click', async ()=>{
       const program=document.getElementById('labProgram').value.trim();
@@ -1152,450 +616,248 @@
       const date=document.getElementById('labDate').value.trim();
       const beneficiaries=document.getElementById('labBeneficiaries').value.trim();
       const goals=document.getElementById('labGoals').value.trim();
-
+      const evidenceInput=document.getElementById('labEvidence');
       const files = evidenceInput.files ? Array.from(evidenceInput.files) : [];
 
       if(!program||!executor||!location||!targetCount||!date||!beneficiaries||!goals||files.length===0){
-        window.showToast('أكملي جميع الحقول المطلوبة، بما في ذلك صور الشواهد','warn');
-        return;
-      }
-      if(files.length > 4){
-        window.showToast('الحد الأعلى 4 صور فقط','warn');
+        showToast('أكملي جميع الحقول المطلوبة، بما في ذلك صور الشواهد','warn');
         return;
       }
 
-      // منع ضغطات متعددة
+      if(files.length > 4){
+        showToast('مسموح 4 صور فقط للشواهد','warn');
+        return;
+      }
+
       saveBtn.disabled = true;
-      const oldText = saveBtn.textContent;
       saveBtn.textContent = 'جاري الحفظ...';
 
       try{
-        // ✅ ضغط الصور قبل التخزين
+        // ضغط الصور قبل التخزين (يحمي من تعطل الحفظ في iPhone)
         const evidenceImages = [];
         for(const f of files){
-          const dataUrl = await compressImageToDataURL(f, 1280, 0.82);
-          evidenceImages.push(dataUrl);
+          const data = await compressImageToDataURL(f, 1280, 1280, 0.82);
+          evidenceImages.push(data);
         }
 
-        // حفظ
         labExperiments.push({
-          program,
-          executor,
-          location,
-          targetCount,
-          date,
-          beneficiaries,
-          goals,
+          program, executor, location, targetCount, date,
+          beneficiaries, goals,
           evidenceImages
         });
 
-        labPersist();
-        labRender();
+        const ok = saveLabToStorage();
+        if(!ok){
+          // رجّعنا آخر عنصر لأنه ما انحفظ
+          labExperiments.pop();
+          return;
+        }
 
+        renderLab();
         document.getElementById('labForm').reset();
-        window.showToast('تم حفظ التقرير');
-
-      }catch(e){
-        window.showToast('فشل حفظ التقرير. غالباً حجم الصور كبير جداً.','danger');
-        console.error(e);
+        showToast('تم حفظ التقرير');
+      }catch(err){
+        showToast('تعذر حفظ التقرير (خطأ في معالجة الصور)','danger');
       }finally{
         saveBtn.disabled = false;
-        saveBtn.textContent = oldText;
+        saveBtn.textContent = 'حفظ التقرير';
       }
     });
 
-    document.getElementById('clearLabsBtn').addEventListener('click', ()=>{
+    clearBtn.addEventListener('click', ()=>{
       if(!labExperiments.length){
-        window.showToast('لا توجد تقارير مسجلة','warn');
+        showToast('لا توجد تقارير مسجلة','warn');
         return;
       }
       if(!confirm('مسح جميع تقارير المختبرات؟')) return;
       labExperiments=[];
-      localStorage.removeItem(LAB_KEY);
-      labRender();
-      window.showToast('تم مسح جميع التقارير');
+      saveLabToStorage();
+      renderLab();
+      showToast('تم مسح جميع التقارير');
     });
 
-    document.getElementById('exportLabsBtn').addEventListener('click', async ()=>{
+    // ✅ التصدير الجديد: طباعة/حفظ PDF بدل الكانفاس
+    exportBtn.addEventListener('click', ()=>{
       if(!labExperiments.length){
-        window.showToast('لا توجد تقارير مسجلة','warn');
+        showToast('لا توجد تقارير مسجلة','warn');
         return;
       }
-      window.showToast('جاري تجهيز ملف PDF...','warn');
-
-      const JsPDF=getJsPDF();
-      const pdf=new JsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-      const pageWidth=pdf.internal.pageSize.getWidth();
-
-      for(let i=0;i<labExperiments.length;i++){
-        const exp=labExperiments[i];
-
-        // ✅ لا fixed (لتفادي شاشة سوداء على iPhone)
-        const printDiv=document.createElement('div');
-        printDiv.style.cssText="position:absolute;left:-10000px;top:0;width:794px;background:#fff;padding:40px 40px 30px;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
-
-        // صور — بالفعل محدودين 4
-        const imagesHtml = (exp.evidenceImages && exp.evidenceImages.length)
-          ? exp.evidenceImages.slice(0,4).map(src=>`
-              <div style="width:120px;height:90px;border:1px solid #bbf7d0;border-radius:8px;overflow:hidden;background:#fff;">
-                <img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block;">
-              </div>
-            `).join('')
-          : '<span style="font-size:14px;font-weight:500;">لا توجد صور مرفقة</span>';
-
-        printDiv.innerHTML=`
-          <div style="text-align:center;margin-bottom:18px;">
-            <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
-                 crossorigin="anonymous"
-                 style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
-            <div style="font-weight:800;font-size:17px;margin-top:4px;">وزارة التعليم</div>
-            <div style="font-weight:900;font-size:18px;margin-top:4px;">تقرير تنفيذ برنامج – المختبرات</div>
-            <div style="margin-top:10px;font-size:15px;font-weight:800;">
-              اسم البرنامج / التجربة:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(exp.program || '')}</span>
-            </div>
-          </div>
-
-          <!-- ✅ حد/خط واحد فقط -->
-          <div style="border:1px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;">
-            <div style="font-size:15px;font-weight:800;margin-bottom:4px;">
-              المنفذة:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(exp.executor || '')}</span>
-            </div>
-
-            <div style="font-size:15px;font-weight:800;margin-bottom:4px;">
-              مكان التنفيذ:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(exp.location || '')}</span>
-            </div>
-
-            <div style="font-size:15px;font-weight:800;margin-bottom:4px;">
-              عدد المستهدفين:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(exp.targetCount || '')}</span>
-            </div>
-
-            <!-- ✅ صندوق نص للمستفيدين -->
-            <div style="font-size:15px;font-weight:900;margin:12px 0 6px;">المستفيدون:</div>
-            <div style="border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;background:#f8fffb;
-                        font-size:15px;font-weight:500;line-height:1.9;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">
-              ${window.nl2brSafe(exp.beneficiaries || '')}
-            </div>
-
-            <!-- ✅ صندوق نص للأهداف (علاج اللخبطة) -->
-            <div style="font-size:15px;font-weight:900;margin:12px 0 6px;">الأهداف:</div>
-            <div style="border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;background:#f8fffb;
-                        font-size:15px;font-weight:500;line-height:1.9;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">
-              ${window.nl2brSafe(exp.goals || '')}
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin:12px 0 6px;">الشواهد (صور):</div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;">
-              ${imagesHtml}
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin-top:12px;">
-              تاريخ التنفيذ:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(exp.date || '')} هـ</span>
-            </div>
-          </div>
-
-          <div style="margin-top:22px;padding-top:10px;border-top:1px solid #bbf7d0;">
-            <div style="display:flex;justify-content:flex-start;direction:ltr;">
-              <div style="text-align:left;">
-                <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
-                <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
-              </div>
-            </div>
-          </div>
-        `;
-
-        document.body.appendChild(printDiv);
-        const canvas=await captureAsCanvas(printDiv);
-        printDiv.remove();
-
-        const imgData=canvas.toDataURL('image/jpeg',0.92);
-        const imgWidth=pageWidth;
-        const imgHeight=(canvas.height*imgWidth)/canvas.width;
-
-        if(i>0) pdf.addPage();
-        pdf.addImage(imgData,'JPEG',0,0,imgWidth,imgHeight);
-      }
-
-      pdf.save('تقارير المختبرات.pdf');
-      window.showToast('تم تصدير ملف PDF');
+      exportLabsByPrint();
     });
   }
 
-  // ============================================================================
-  // General (التقرير العام)
-  // ============================================================================
+  // =======================
+  // LABS: Export by PRINT (حل جذري لشاشة سوداء + خط متداخل)
+  // =======================
+  function exportLabsByPrint(){
+    const logoUrl = "https://raw.githubusercontent.com/omymh/school26/main/26.png";
 
-  let generalReports=[];
-  const GEN_KEY = 'w26_general_reports';
+    const pagesHtml = labExperiments.map((exp, idx)=>{
+      const imgs = (exp.evidenceImages || []).slice(0,4).map(src=>{
+        return `<div class="imgBox"><img src="${src}" alt="شاهد"></div>`;
+      }).join('');
 
-  function generalLoad(){
+      return `
+        <section class="page">
+          <div class="head">
+            <img class="logo" src="${logoUrl}" alt="header">
+            <div class="title1">وزارة التعليم</div>
+            <div class="title2">تقرير تنفيذ برنامج – المختبرات</div>
+            <div class="program"><span>اسم البرنامج / التجربة:</span> <b>${escapeHtml(exp.program)}</b></div>
+          </div>
+
+          <div class="box">
+            <div class="row"><span class="k">المنفذة:</span><span class="v">${escapeHtml(exp.executor)}</span></div>
+            <div class="row"><span class="k">مكان التنفيذ:</span><span class="v">${escapeHtml(exp.location)}</span></div>
+            <div class="row"><span class="k">عدد المستهدفين:</span><span class="v">${escapeHtml(exp.targetCount)}</span></div>
+
+            <div class="row col">
+              <span class="k">المستفيدون:</span>
+              <div class="v pre">${escapeHtml(exp.beneficiaries)}</div>
+            </div>
+
+            <div class="row col">
+              <span class="k">الأهداف:</span>
+              <div class="v pre">${escapeHtml(exp.goals)}</div>
+            </div>
+
+            <div class="row col">
+              <span class="k">الشواهد (صور) — حدها 4:</span>
+              <div class="imgs">${imgs || '<div class="noimg">لا توجد صور</div>'}</div>
+            </div>
+
+            <div class="row"><span class="k">تاريخ التنفيذ:</span><span class="v">${escapeHtml(exp.date)} هـ</span></div>
+          </div>
+
+          <div class="sign">
+            <div class="sigBox">
+              <div class="sigTitle">مديرة المدرسة</div>
+              <div class="sigName">أماني آل عبشان</div>
+            </div>
+          </div>
+        </section>
+      `;
+    }).join('');
+
+    const html = `
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تقرير المختبرات - طباعة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Tajawal', system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    color:#0f172a;
+    background:#fff;
+    direction:rtl;
+  }
+  .page{
+    padding:18mm 14mm;
+    page-break-after:always;
+  }
+  .head{text-align:center;margin-bottom:12px}
+  .logo{width:100%;height:22mm;object-fit:contain;margin-bottom:6px}
+  .title1{font-weight:800;font-size:14px;margin:2px 0}
+  .title2{font-weight:900;font-size:16px;margin:2px 0}
+  .program{margin-top:8px;font-size:14px;font-weight:700}
+  .box{
+    border:2px solid #bbf7d0;
+    border-radius:12px;
+    padding:12px 10px;
+    background:#f8fffb;
+  }
+  .row{display:flex;gap:10px;align-items:flex-start;line-height:1.9;margin:4px 0}
+  .row.col{display:block}
+  .k{min-width:120px;font-weight:800}
+  .v{font-weight:500}
+  .pre{
+    white-space:pre-wrap;
+    word-break:break-word;
+    direction:rtl;
+    unicode-bidi:plaintext;
+    padding:6px 8px;
+    background:#fff;
+    border:1px solid #d1fae5;
+    border-radius:10px;
+    margin-top:6px;
+  }
+  .imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .imgBox{width:42mm;height:28mm;border:1px solid #bbf7d0;border-radius:10px;overflow:hidden;background:#fff}
+  .imgBox img{width:100%;height:100%;object-fit:cover}
+  .noimg{font-size:12px;color:#475569}
+  .sign{
+    margin-top:14mm;
+    border-top:1px solid #bbf7d0;
+    padding-top:6mm;
+    direction:ltr;
+    display:flex;
+    justify-content:flex-start;
+  }
+  .sigBox{text-align:left}
+  .sigTitle{font-weight:800;color:#047857;font-size:13px}
+  .sigName{font-weight:600;color:#047857;font-size:13px}
+
+  @media print{
+    body{background:#fff}
+    .page{page-break-after:always}
+  }
+</style>
+</head>
+<body>
+${pagesHtml}
+<script>
+  // انتظر تحميل الصور والخط قبل الطباعة (مهم على iPhone)
+  async function waitForAssets(){
     try{
-      const saved=localStorage.getItem(GEN_KEY);
-      generalReports = saved ? (JSON.parse(saved)||[]) : [];
-    }catch(e){
-      generalReports=[];
+      if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    }catch(e){}
+    const imgs = Array.from(document.images || []);
+    await Promise.all(imgs.map(img => img.complete ? Promise.resolve() : new Promise(res=>{
+      img.onload = res; img.onerror = res;
+    })));
+  }
+  (async ()=>{
+    await waitForAssets();
+    window.focus();
+    window.print();
+    // ملاحظة: لا نغلق تلقائياً لأن iOS أحيانًا يمنع
+  })();
+</script>
+</body>
+</html>
+    `.trim();
+
+    const w = window.open('', '_blank');
+    if(!w){
+      showToast('المتصفح منع فتح نافذة الطباعة. فعّلي Pop-ups ثم أعيدي المحاولة.','danger');
+      return;
     }
-    renderGeneral();
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
   }
 
-  function generalPersist(){
-    try{
-      localStorage.setItem(GEN_KEY, JSON.stringify(generalReports));
-    }catch(e){
-      window.showToast('التخزين امتلأ. احذفي تقارير قديمة','danger');
-      throw e;
-    }
-  }
-
-  function renderGeneral(){
-    const body=document.getElementById('generalBody');
-    if(!body) return;
-
-    body.innerHTML='';
-    generalReports.forEach((g,i)=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${i+1}</td>
-        <td class="text-right">${window.escapeHtml(g.program)}</td>
-        <td>${window.escapeHtml(g.type)}</td>
-        <td>${window.escapeHtml(g.date)}</td>
-        <td>${window.escapeHtml(g.count)}</td>
-        <td class="text-right">${window.nl2brSafe(g.beneficiaries)}</td>
-        <td class="text-right">${window.nl2brSafe(g.details)}</td>
-        <td><button class="btn danger" style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;" onclick="deleteGeneral(${i})">حذف</button></td>`;
-      body.appendChild(tr);
-    });
-  }
-
-  window.deleteGeneral = function(i){
-    if(!confirm('حذف هذا التقرير؟')) return;
-    generalReports.splice(i,1);
-    generalPersist();
-    renderGeneral();
-    window.showToast('تم حذف التقرير');
-  };
-
-  function initGeneralForm(){
-    document.getElementById('saveGeneralBtn').addEventListener('click', ()=>{
-      const program=document.getElementById('gProgram').value.trim();
-      const executor=document.getElementById('gExecutor').value.trim();
-      const location=document.getElementById('gLocation').value.trim();
-      const type=document.getElementById('gType').value;
-      const date=document.getElementById('gDate').value.trim();
-      const count=document.getElementById('gCount').value.trim();
-      const beneficiaries=document.getElementById('gBeneficiaries').value.trim();
-      const details=document.getElementById('gDetails').value.trim();
-
-      if(!program||!executor||!location||!type||!date||!count||!beneficiaries||!details){
-        window.showToast('أكملي جميع الحقول','warn');
-        return;
-      }
-
-      generalReports.push({program,executor,location,type,date,count,beneficiaries,details});
-      generalPersist();
-      renderGeneral();
-      document.getElementById('generalForm').reset();
-      window.showToast('تم حفظ التقرير');
-    });
-
-    document.getElementById('clearGeneralBtn').addEventListener('click', ()=>{
-      if(!generalReports.length){window.showToast('لا توجد تقارير مسجلة','warn');return;}
-      if(!confirm('مسح جميع تقارير التقرير العام؟')) return;
-      generalReports=[];
-      localStorage.removeItem(GEN_KEY);
-      renderGeneral();
-      window.showToast('تم مسح جميع التقارير');
-    });
-
-    document.getElementById('exportGeneralBtn').addEventListener('click', async ()=>{
-      if(!generalReports.length){window.showToast('لا توجد تقارير مسجلة','warn');return;}
-      window.showToast('جاري تجهيز ملف PDF...','warn');
-
-      const JsPDF=getJsPDF();
-      const pdf=new JsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-      const pageWidth=pdf.internal.pageSize.getWidth();
-
-      for(let i=0;i<generalReports.length;i++){
-        const rep=generalReports[i];
-
-        const printDiv=document.createElement('div');
-        printDiv.style.cssText="position:absolute;left:-10000px;top:0;width:794px;background:#fff;padding:40px 40px 30px;direction:rtl;font-family:'Tajawal',sans-serif;font-size:15px;";
-
-        printDiv.innerHTML=`
-          <div style="text-align:center;margin-bottom:18px;">
-            <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
-                 crossorigin="anonymous"
-                 style="width:100%;height:70px;object-fit:contain;margin-bottom:8px;">
-            <div style="font-weight:900;font-size:18px;margin-top:4px;">تقرير عام لتنفيذ برنامج / نشاط</div>
-            <div style="margin-top:10px;font-size:15px;font-weight:900;">
-              نوع التقرير: <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.type||'')}</span>
-            </div>
-            <div style="margin-top:6px;font-size:15px;font-weight:900;">
-              عنوان البرنامج / النشاط: <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.program||'')}</span>
-            </div>
-          </div>
-
-          <div style="border:1px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;">
-            <div style="font-size:15px;font-weight:900;margin-bottom:4px;">
-              المنفذ / الجهة المنفذة:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.executor||'')}</span>
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin-bottom:4px;">
-              مكان التنفيذ:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.location||'')}</span>
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin-bottom:4px;">
-              عدد المستهدفين:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.count||'')}</span>
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin:12px 0 6px;">الفئة المستفيدة:</div>
-            <div style="border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;background:#f8fffb;
-                        font-size:15px;font-weight:500;line-height:1.9;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">
-              ${window.nl2brSafe(rep.beneficiaries||'')}
-            </div>
-
-            <div style="font-size:15px;font-weight:900;margin-top:12px;">
-              تاريخ التنفيذ:
-              <span style="font-weight:500;padding-right:6px;">${window.escapeHtml(rep.date||'')} هـ</span>
-            </div>
-
-            <hr style="border:none;border-top:1px dashed #bbf7d0;margin:14px 0;">
-
-            <div style="font-size:15px;font-weight:900;margin:12px 0 6px;">أبرز ما تم تنفيذه:</div>
-            <div style="border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;background:#f8fffb;
-                        font-size:15px;font-weight:500;line-height:1.9;text-align:right;direction:rtl;unicode-bidi:plaintext;white-space:pre-wrap;">
-              ${window.nl2brSafe(rep.details||'')}
-            </div>
-          </div>
-
-          <div style="margin-top:22px;padding-top:10px;border-top:1px solid #bbf7d0;">
-            <div style="display:flex;justify-content:flex-start;direction:ltr;">
-              <div style="text-align:left;">
-                <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
-                <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
-              </div>
-            </div>
-          </div>
-        `;
-
-        document.body.appendChild(printDiv);
-        const canvas=await captureAsCanvas(printDiv);
-        printDiv.remove();
-
-        const imgData=canvas.toDataURL('image/jpeg',0.92);
-        const imgWidth=pageWidth;
-        const imgHeight=(canvas.height*imgWidth)/canvas.width;
-
-        if(i>0) pdf.addPage();
-        pdf.addImage(imgData,'JPEG',0,0,imgWidth,imgHeight);
-      }
-
-      pdf.save('التقارير العامة.pdf');
-      window.showToast('تم تصدير ملف PDF');
-    });
-  }
-
-  // ============================================================================
-  // Hijri calendar (مبسط)
-  // ============================================================================
-
-  let currentHijriYear=1447,currentHijriMonth=1;
-  const HIJRI_MONTH_NAMES=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-
-  function getTodayHijri(){
-    const t=new Date();
-    return `1447/${t.getMonth()+1}/${t.getDate()}`;
-  }
-
-  function renderHijriCalendar(calendar,input){
-    calendar.associatedInput=input;
-    const monthYear=calendar.querySelector('.hijri-month-year');
-    const daysContainer=calendar.querySelector('.hijri-days');
-
-    monthYear.textContent=HIJRI_MONTH_NAMES[currentHijriMonth-1]+' '+currentHijriYear;
-    const daysInMonth=30;
-
-    let html='';
-    for(let d=1;d<=daysInMonth;d++) html+=`<div class="hijri-day">${d}</div>`;
-    daysContainer.innerHTML=html;
-
-    daysContainer.querySelectorAll('.hijri-day').forEach(day=>{
-      day.onclick=function(){
-        const val=`${currentHijriYear}/${currentHijriMonth}/${this.textContent}`;
-        input.value=val;
-        calendar.classList.remove('active');
-        window.showToast('تم اختيار التاريخ');
-      };
-    });
-  }
-
-  function initHijriCalendars(){
-    const hijriInputs=document.querySelectorAll('.hijri-date-input');
-    const calendars=document.querySelectorAll('.hijri-calendar');
-
-    hijriInputs.forEach((input,idx)=>{
-      const calendar=calendars[idx];
-      const toggle=input.parentElement.querySelector('.hijri-toggle');
-
-      toggle.addEventListener('click',e=>{
-        e.preventDefault();e.stopPropagation();
-        calendars.forEach(c=>c.classList.remove('active'));
-        calendar.classList.toggle('active');
-        if(calendar.classList.contains('active')) renderHijriCalendar(calendar,input);
-      });
-
-      document.addEventListener('click',e=>{
-        if(!calendar.contains(e.target) && e.target!==toggle) calendar.classList.remove('active');
-      });
-      calendar.addEventListener('click',e=>e.stopPropagation());
-
-      const prevYear=calendar.querySelector('.prev-year');
-      const prevMonth=calendar.querySelector('.prev-month');
-      const nextMonth=calendar.querySelector('.next-month');
-      const nextYear=calendar.querySelector('.next-year');
-      const todayBtn=calendar.querySelector('.today-btn');
-
-      prevYear.onclick=()=>{currentHijriYear--;renderHijriCalendar(calendar,input);};
-      nextYear.onclick=()=>{currentHijriYear++;renderHijriCalendar(calendar,input);};
-      prevMonth.onclick=()=>{
-        currentHijriMonth--;
-        if(currentHijriMonth<1){currentHijriMonth=12;currentHijriYear--;}
-        renderHijriCalendar(calendar,input);
-      };
-      nextMonth.onclick=()=>{
-        currentHijriMonth++;
-        if(currentHijriMonth>12){currentHijriMonth=1;currentHijriYear++;}
-        renderHijriCalendar(calendar,input);
-      };
-      todayBtn.onclick=()=>{input.value=getTodayHijri();calendar.classList.remove('active');window.showToast('تم اختيار تاريخ اليوم');};
-    });
-  }
-
-  // ============================================================================
+  // =======================
   // Init
-  // ============================================================================
-
+  // =======================
   function initializeApp(){
-    waitLoad();
-    initWaitForm();
-
-    labLoad();
-    initLabForm();
-
-    generalLoad();
-    initGeneralForm();
-
-    initHijriCalendars();
+    try{
+      loadLab();
+      initLabForm();
+    }catch(e){
+      showToast('حدث خطأ في تهيئة الصفحة. افتحي Console لمعرفة السبب.','danger');
+    }
   }
-
   document.addEventListener('DOMContentLoaded', initializeApp);
 </script>
 
 </body>
 </html>
+
