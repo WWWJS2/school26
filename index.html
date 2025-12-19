@@ -1219,139 +1219,130 @@
         showToast('لا توجد تقارير مسجلة','warn');
         return;
       }
-      showToast('جاري تجهيز ملف PDF...','warn');
-      await waitFontsReady();
-
-      const JsPDF=getJsPDF();
-      const pdf=new JsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-      const pageWidth=pdf.internal.pageSize.getWidth();
-      const pageHeight=pdf.internal.pageSize.getHeight();
-
-      for(let i=0;i<labExperiments.length;i++){
-        const exp=labExperiments[i];
-
-        const printDiv=document.createElement('div');
-        // تغيير: استخدام absolute بدلاً من fixed + تقليل العرض للجوال
-        printDiv.style.cssText="position:absolute;top:0;left:0;width:595px;min-height:842px;background:#fff;padding:30px 25px 20px;z-index:3000;direction:rtl;unicode-bidi:plaintext;font-family:'Tajawal',sans-serif;font-size:14px;color:#000;";
-
+      
+      // حل جذري: فتح نافذة طباعة جديدة بدلاً من html2canvas
+      showToast('جاري تجهيز التقرير...','warn');
+      
+      let allReportsHtml = '';
+      
+      for(let i=0; i<labExperiments.length; i++){
+        const exp = labExperiments[i];
+        
         const imagesHtml = (exp.evidenceImages && exp.evidenceImages.length)
           ? exp.evidenceImages.map(src=>`
-              <div style="width:100px;height:75px;border:1px solid #bbf7d0;border-radius:6px;overflow:hidden;background:#fff;">
+              <div style="width:120px;height:90px;border:1px solid #bbf7d0;border-radius:8px;overflow:hidden;display:inline-block;margin:4px;">
                 <img src="${src}" style="width:100%;height:100%;object-fit:cover;">
               </div>
             `).join('')
-          : '<span style="font-size:13px;font-weight:500;color:#000;">لا توجد صور مرفقة</span>';
-
-        printDiv.innerHTML=`
-          <div style="display:block;direction:rtl;unicode-bidi:plaintext;background:#fff;color:#000;">
-            <div style="text-align:center;margin-bottom:20px;background:#fff;">
-              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png"
-                   crossorigin="anonymous"
-                   style="width:100%;max-width:400px;height:60px;object-fit:contain;margin-bottom:6px;">
-              <div style="font-weight:800;font-size:16px;margin-top:4px;color:#000;">وزارة التعليم</div>
-              <div style="font-weight:800;font-size:17px;margin-top:4px;color:#000;">تقرير تنفيذ برنامج – المختبرات</div>
-              <div style="margin-top:6px;font-size:14px;font-weight:700;color:#000;">
+          : '<span style="font-size:14px;font-weight:500;">لا توجد صور مرفقة</span>';
+        
+        allReportsHtml += `
+          <div style="page-break-after: always; padding: 40px; font-family: 'Tajawal', Arial, sans-serif; direction: rtl; background: #fff; color: #000;">
+            <div style="text-align:center;margin-bottom:24px;">
+              <img src="https://raw.githubusercontent.com/omymh/school26/main/26.png" 
+                   style="width:100%;max-width:500px;height:70px;object-fit:contain;margin-bottom:8px;">
+              <div style="font-weight:800;font-size:17px;margin-top:4px;color:#000;">وزارة التعليم</div>
+              <div style="font-weight:800;font-size:18px;margin-top:4px;color:#000;">تقرير تنفيذ برنامج – المختبرات</div>
+              <div style="margin-top:8px;font-size:15px;font-weight:700;color:#000;">
                 <span>اسم البرنامج / التجربة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.program || '')}</span>
               </div>
             </div>
 
-            <div style="border:2px solid #bbf7d0;border-radius:10px;padding:14px 12px;line-height:1.9;direction:rtl;unicode-bidi:plaintext;background:#fff;color:#000;">
-              <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:#000;">
+            <div style="border:2px solid #bbf7d0;border-radius:12px;padding:18px 14px;line-height:2;background:#fff;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
                 <span>المنفذة:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.executor || '')}</span>
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
                 <span>مكان التنفيذ:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.location || '')}</span>
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#000;">
                 <span>عدد المستهدفين:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.targetCount || '')}</span>
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin-bottom:4px;color:#000;">المستفيدون:</div>
-              <div style="font-size:14px;font-weight:500;white-space:pre-wrap;direction:rtl;unicode-bidi:plaintext;text-align:right;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#000;">المستفيدون:</div>
+              <div style="font-size:15px;font-weight:500;white-space:pre-wrap;text-align:right;color:#000;">
                 ${escapeHtml(exp.beneficiaries || '')}
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin:8px 0 4px;color:#000;">الأهداف:</div>
-              <div style="font-size:14px;font-weight:500;white-space:pre-wrap;direction:rtl;unicode-bidi:plaintext;text-align:right;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin:10px 0 6px;color:#000;">الأهداف:</div>
+              <div style="font-size:15px;font-weight:500;white-space:pre-wrap;text-align:right;color:#000;">
                 ${escapeHtml(exp.goals || '')}
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin-top:10px;margin-bottom:4px;color:#000;">الشواهد (صور):</div>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;direction:rtl;background:#fff;">
+              <div style="font-size:15px;font-weight:700;margin-top:12px;margin-bottom:6px;color:#000;">الشواهد (صور):</div>
+              <div style="margin-bottom:8px;">
                 ${imagesHtml}
               </div>
 
-              <div style="font-size:14px;font-weight:700;margin-top:8px;color:#000;">
+              <div style="font-size:15px;font-weight:700;margin-top:10px;color:#000;">
                 <span>تاريخ التنفيذ:</span>
                 <span style="padding-right:6px;font-weight:500;">${escapeHtml(exp.date || '')} هـ</span>
               </div>
             </div>
-          </div>
 
-          <div style="margin-top:20px;padding-top:8px;border-top:1px solid #bbf7d0;background:#fff;">
-            <div style="display:flex;justify-content:flex-start;direction:ltr;">
-              <div style="text-align:left;">
-                <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:13px;">مديرة المدرسة</p>
-                <p style="margin:0;font-size:13px;color:#047857;">أماني آل عبشان</p>
+            <div style="margin-top:24px;padding-top:10px;border-top:1px solid #bbf7d0;">
+              <div style="text-align:left;direction:ltr;">
+                <p style="margin:0 0 3px;font-weight:bold;color:#047857;font-size:14px;">مديرة المدرسة</p>
+                <p style="margin:0;font-size:14px;color:#047857;">أماني آل عبشان</p>
               </div>
             </div>
           </div>
         `;
-
-        document.body.appendChild(printDiv);
-        
-        // انتظار تحميل الصور
-        await new Promise(r => setTimeout(r, 300));
-        
-        // استخدام إعدادات محسنة للجوال
-        const canvas = await html2canvas(printDiv, {
-          scale: 1,
-          backgroundColor: '#ffffff',
-          useCORS: true,
-          logging: false,
-          allowTaint: true,
-          foreignObjectRendering: false,
-          width: 595,
-          height: printDiv.scrollHeight,
-          scrollX: 0,
-          scrollY: 0,
-          windowWidth: 595,
-          windowHeight: printDiv.scrollHeight
-        });
-        
-        document.body.removeChild(printDiv);
-
-        // رسم خلفية بيضاء على الـ canvas قبل التصدير
-        const ctx = canvas.getContext('2d');
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
-        const tempCtx = tempCanvas.getContext('2d');
-        tempCtx.fillStyle = '#ffffff';
-        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.drawImage(canvas, 0, 0);
-
-        const imgData = tempCanvas.toDataURL('image/jpeg', 0.92);
-        const imgWidth = pageWidth;
-        const imgHeight = (tempCanvas.height * imgWidth) / tempCanvas.width;
-
-        if(i > 0) pdf.addPage();
-        
-        // إضافة خلفية بيضاء للصفحة
-        pdf.setFillColor(255, 255, 255);
-        pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-        
-        pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
       }
-
-      pdf.save('تقارير المختبرات.pdf');
-      showToast('تم تصدير ملف PDF');
+      
+      // فتح نافذة جديدة للطباعة
+      const printWindow = window.open('', '_blank');
+      if(!printWindow){
+        showToast('يرجى السماح بالنوافذ المنبثقة','danger');
+        return;
+      }
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>تقارير المختبرات</title>
+          <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            html, body { 
+              font-family: 'Tajawal', Arial, sans-serif; 
+              background: #fff; 
+              color: #000;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            @media print {
+              body { background: #fff !important; }
+              * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            }
+            @page { size: A4; margin: 10mm; }
+          </style>
+        </head>
+        <body>
+          ${allReportsHtml}
+          <script>
+            // انتظار تحميل الصور ثم الطباعة
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+              }, 500);
+            };
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      
+      showToast('تم فتح نافذة الطباعة - اختر حفظ كـ PDF');
     };
   }
 
