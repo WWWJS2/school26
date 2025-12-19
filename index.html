@@ -152,6 +152,21 @@
       box-shadow:0 0 0 3px rgba(139,92,246,.18);
     }
 
+    /* =========================
+       ✅ إصلاح تنظيم النص متعدد الأسطر (الأهداف/المستفيدون)
+       ========================= */
+    .multiline{
+      white-space:pre-wrap;   /* يحافظ على Enter */
+      word-break:break-word;  /* يمنع تراكب الكلمات */
+      line-height:1.85;
+    }
+    /* تحسين إدخال النص داخل textarea (RTL مضبوط) */
+    .lab-form textarea{
+      direction:rtl;
+      text-align:right;
+      unicode-bidi:plaintext;
+    }
+
     .chipset{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
     .chip{
       display:flex;align-items:center;gap:6px;
@@ -248,7 +263,7 @@
       overflow-x:auto;background:#fff;
     }
     table{width:100%;border-collapse:collapse;min-width:750px;font-size:.8rem;}
-    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;}
+    th,td{padding:8px 6px;border-bottom:1px solid #e5e7eb;text-align:center;vertical-align:top;}
     th{
       background:linear-gradient(135deg,var(--primary),var(--secondary));
       color:#fff;font-weight:800;font-size:.78rem;white-space:nowrap;
@@ -749,6 +764,17 @@
     });
   }
 
+  // ✅ تأكد أن خط Tajawal جاهز قبل تصوير PDF (يحل تلخبط العربي داخل PDF)
+  async function ensureArabicFontReady(){
+    try{
+      if(document.fonts && document.fonts.load){
+        await document.fonts.load('16px "Tajawal"');
+        await document.fonts.ready;
+      }
+      await new Promise(r=>setTimeout(r,120));
+    }catch(e){}
+  }
+
   // =================================================================================
   // دوال التنقل
   // =================================================================================
@@ -939,6 +965,7 @@
       `;
 
       document.body.appendChild(printDiv);
+      await ensureArabicFontReady();
       const canvas=await captureAsCanvas(printDiv);
       document.body.removeChild(printDiv);
 
@@ -992,12 +1019,12 @@
         : 'لا يوجد';
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${i+1}</td>
-        <td class="text-right">${escapeHtml(e.program)}</td>
+        <td class="text-right multiline">${escapeHtml(e.program)}</td>
         <td>${escapeHtml(e.executor)}</td>
         <td>${escapeHtml(e.date)}</td>
         <td>${escapeHtml(e.targetCount)}</td>
-        <td class="text-right">${escapeHtml(e.beneficiaries)}</td>
-        <td class="text-right">${escapeHtml(e.goals || '')}</td>
+        <td class="text-right multiline">${escapeHtml(e.beneficiaries)}</td>
+        <td class="text-right multiline">${escapeHtml(e.goals || '')}</td>
         <td class="text-right">${escapeHtml(evidenceText)}</td>
         <td>
           <button class="btn danger"
@@ -1155,6 +1182,7 @@
         `;
 
         document.body.appendChild(printDiv);
+        await ensureArabicFontReady(); // ✅ أهم سطر لحل تلخبط الخط في PDF
         const canvas=await captureAsCanvas(printDiv);
         document.body.removeChild(printDiv);
 
@@ -1192,12 +1220,12 @@
     generalReports.forEach((g,i)=>{
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${i+1}</td>
-        <td class="text-right">${escapeHtml(g.program)}</td>
+        <td class="text-right multiline">${escapeHtml(g.program)}</td>
         <td>${escapeHtml(g.type)}</td>
         <td>${escapeHtml(g.date)}</td>
         <td>${escapeHtml(g.count)}</td>
-        <td class="text-right">${escapeHtml(g.beneficiaries)}</td>
-        <td class="text-right">${escapeHtml(g.details)}</td>
+        <td class="text-right multiline">${escapeHtml(g.beneficiaries)}</td>
+        <td class="text-right multiline">${escapeHtml(g.details)}</td>
         <td><button class="btn danger" style="width:auto;padding:4px 8px;font-size:.75rem;border-radius:999px;box-shadow:none;" onclick="deleteGeneral(${i})">حذف</button></td>`;
       body.appendChild(tr);
     });
@@ -1306,6 +1334,7 @@
         `;
 
         document.body.appendChild(printDiv);
+        await ensureArabicFontReady();
         const canvas=await captureAsCanvas(printDiv);
         document.body.removeChild(printDiv);
 
@@ -1416,4 +1445,3 @@
 </script>
 </body>
 </html>
-
